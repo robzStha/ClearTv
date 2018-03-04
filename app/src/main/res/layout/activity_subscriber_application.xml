@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.app.cleartv.SubscriberApplication">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/spc_16"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_45"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="@string/title"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/sp_salutation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:entries="@array/salutations"
+                    android:visibility="visible"></Spinner>
+
+                <RelativeLayout
+                    android:id="@+id/rl_salutation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/et_salutation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/iv_salutation_del"
+                        android:inputType="textCapWords"
+                        android:textSize="16sp"
+                        app:met_primaryColor="?colorAccent" />
+
+                    <ImageView
+                        android:id="@+id/iv_salutation_del"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="@dimen/spc_8"
+                        android:src="@drawable/ic_highlight_off_black_24dp" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_applicants_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/applicants_name"
+                android:inputType="textCapWords"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_45"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="@string/gender"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/sp_gender"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:entries="@array/gender"></Spinner>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_45"
+                android:layout_marginBottom="@dimen/spc_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="3"
+                    android:text="@string/nationality"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/sp_nationality"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:entries="@array/nationality"
+                    android:visibility="visible"></Spinner>
+
+                <RelativeLayout
+                    android:id="@+id/rl_nationality"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/et_nationality"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/iv_nationality_del"
+                        android:inputType="textCapWords"
+                        android:textSize="16sp"
+                        app:met_primaryColor="?colorAccent" />
+
+                    <ImageView
+                        android:id="@+id/iv_nationality_del"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="@dimen/spc_8"
+                        android:src="@drawable/ic_highlight_off_black_24dp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/spc_1"-->
+            <!--android:background="@color/colorGray" />-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_30"
+                android:gravity="center_vertical"
+                android:text="@string/identification"
+                android:textSize="@dimen/spc_16"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_1"
+                android:background="@color/colorGray" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_citizenship_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/citizen_no"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/spc_1"
+                    android:layout_weight="5"
+                    android:background="@color/colorGray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/or" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/spc_1"
+                    android:layout_weight="5"
+                    android:background="@color/colorGray" />
+
+            </LinearLayout>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_passport_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/passport_no"
+                android:inputType="textCapWords"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/spc_1"-->
+            <!--android:background="@color/colorGray" />-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_30"
+                android:gravity="center_vertical"
+                android:text="@string/address"
+                android:textSize="@dimen/spc_16"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_1"
+                android:background="@color/colorGray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/et_house_no"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/spc_4"
+                    android:layout_weight="1"
+                    android:hint="@string/house_no"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="?colorAccent"
+                    app:met_singleLineEllipsis="true" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/et_ward_no"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spc_4"
+                    android:layout_weight="1"
+                    android:hint="@string/ward_no"
+                    android:textSize="16sp"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="?colorAccent"
+                    app:met_singleLineEllipsis="true" />
+
+            </LinearLayout>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_contact_mobile_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/contact_mobile_no"
+                android:inputType="number"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_30"
+                android:gravity="center_vertical"
+                android:text="@string/occupation"
+                android:textSize="@dimen/spc_16"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_1"
+                android:background="@color/colorGray" />
+
+            <RadioGroup
+                android:layout_marginTop="@dimen/spc_8"
+                android:id="@+id/radio_occupation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/radio_private_job"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_job"
+                    android:textSize="@dimen/spc_16" />
+
+                <RadioButton
+                    android:id="@+id/radio_government_job"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/government_job"
+                    android:textSize="@dimen/spc_16" />
+
+                <RadioButton
+                    android:id="@+id/radio_non_profitable_jobb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/non_profitable_job"
+                    android:textSize="@dimen/spc_16" />
+
+                <RadioButton
+                    android:id="@+id/radio_self_employed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/self_employed"
+                    android:textSize="@dimen/spc_16" />
+
+            </RadioGroup>
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Library Name"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

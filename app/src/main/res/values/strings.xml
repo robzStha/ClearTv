@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">ClearTV</string>
+    <string name="subsc_app_form">Subscriber Application Form</string>
+    <string name="title">Title: </string>
+    <string name="applicants_name">Applicant\'s Name</string>
+    <string name="gender">Gender: </string>
+    <string name="nationality">Nationality: </string>
+    <string name="identification">Identification</string>
+    <string name="or">or</string>
+    <string name="passport_no">Passport No</string>
+    <string name="citizen_no">Citizenship No</string>
+    <string name="address">Address</string>
+    <string name="house_no">House No</string>
+    <string name="ward_no">Ward No</string>
+    <string name="contact_mobile_no">Contact/Mobile No</string>
+    <string name="email">Email</string>
+    <string name="occupation">Occupation</string>
+    <string name="private_job">Private Job</string>
+    <string name="government_job">Government Job</string>
+    <string name="non_profitable_job">Non Profitable</string>
+    <string name="self_employed">Self Employed</string>
+
+    <string-array name="salutations">
+        <item>Mr.</item>
+        <item>Ms.</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="nationality">
+        <item>Nepali</item>
+        <item>Others</item>
+    </string-array>
+
+</resources>
