@@ -14,6 +14,12 @@
         <item name="colorPrimaryDark">@color/colorGray</item>
         <item name="colorAccent">@color/colorGray</item>
     </style>
+
+    <style name="SignatureTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorGray</item>
+        <item name="colorPrimaryDark">@color/colorGray</item>
+        <item name="colorAccent">@color/colorGray</item>
+    </style>
     <!--<item name="android:windowTranslucentStatus">true</item>-->
 
 </resources>

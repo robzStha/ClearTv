@@ -1,11 +1,15 @@
 package com.app.cleartv;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,6 +39,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     RelativeLayout rl_salutation;
     @BindView(R.id.rl_nationality)
     RelativeLayout rl_nationality;
+    @BindView(R.id.rl_sign)
+    RelativeLayout rl_sign;
+    @BindView(R.id.iv_sign)
+    ImageView iv_sign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +71,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //        et_nationality.setOnTouchListener(this);
         iv_nationality_del.setOnClickListener(this);
         iv_salutation_del.setOnClickListener(this);
+        rl_sign.setOnClickListener(this);
 
     }
 
@@ -137,10 +146,32 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     @Override
     public void onClick(View view) {
-        if (view == iv_salutation_del) {
-            RemoveETSalutation();
-        } else if (view == iv_nationality_del) {
-            RemoveETNationality();
+        switch (view.getId()) {
+            case R.id.iv_salutation_del:
+                RemoveETSalutation();
+                break;
+            case R.id.iv_nationality_del:
+                RemoveETNationality();
+                break;
+            case R.id.rl_sign:
+                Intent intent = new Intent();
+                intent.setClass(SubscriberApplication.this, Signature.class);
+                SubscriberApplication.this.startActivityForResult(intent, 1);
+                break;
+        }
+    }
+
+    Bitmap current_bmp;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK){
+//            editorBitmapArray.add(current_bmp);
+//            current_bmp = data.get
+            byte[] byteArray = data.getByteArrayExtra("sign");
+            current_bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            iv_sign.setImageBitmap(current_bmp);
         }
     }
 }

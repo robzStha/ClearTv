@@ -31,6 +31,10 @@
     <string name="clear_tv">Clear TV</string>
     <string name="login_submit"><![CDATA[Login & Submit]]></string>
     <string name="contact_details">Contact Details</string>
+    <string name="back">Back</string>
+    <string name="clear">Clear</string>
+    <string name="save">Save</string>
+    <string name="sign">Sign</string>
 
     <string-array name="salutations">
         <item>Mr.</item>
