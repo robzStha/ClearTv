@@ -22,6 +22,15 @@
     <string name="district">District</string>
     <string name="vdc_municipality">VDC/Municiplaity</string>
     <string name="tole_street_name">Tole/Street Name</string>
+    <string name="service_details">Service Details</string>
+    <string name="subscription_type">Subscription Type: </string>
+    <string name="user_id">User Id</string>
+    <string name="service_types">Service Types</string>
+    <string name="ftth">FTTH</string>
+    <string name="cable_internet">Cable Internet</string>
+    <string name="clear_tv">Clear TV</string>
+    <string name="login_submit"><![CDATA[Login & Submit]]></string>
+    <string name="contact_details">Contact Details</string>
 
     <string-array name="salutations">
         <item>Mr.</item>
@@ -38,6 +47,10 @@
     <string-array name="nationality">
         <item>Nepali</item>
         <item>Others</item>
+    </string-array>
+    <string-array name="subscription_type">
+        <item>Residential</item>
+        <item>Enterprise</item>
     </string-array>
 
 </resources>

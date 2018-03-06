@@ -9,4 +9,5 @@
     <dimen name="spc_35">35dp</dimen>
     <dimen name="spc_30">30dp</dimen>
     <dimen name="spc_4">4dp</dimen>
+    <dimen name="txt_16">16sp</dimen>
 </resources>
