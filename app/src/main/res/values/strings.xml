@@ -19,6 +19,9 @@
     <string name="government_job">Government Job</string>
     <string name="non_profitable_job">Non Profitable</string>
     <string name="self_employed">Self Employed</string>
+    <string name="district">District</string>
+    <string name="vdc_municipality">VDC/Municiplaity</string>
+    <string name="tole_street_name">Tole/Street Name</string>
 
     <string-array name="salutations">
         <item>Mr.</item>

@@ -174,54 +174,71 @@
                 android:layout_height="@dimen/spc_1"
                 android:background="@color/colorGray" />
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/et_citizenship_no"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/citizen_no"
-                android:textSize="16sp"
-                app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
-                app:met_singleLineEllipsis="true" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:weightSum="12">
+                android:weightSum="15">
 
-                <View
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/et_citizenship_no"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/spc_1"
-                    android:layout_weight="5"
-                    android:background="@color/colorGray" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="@string/citizen_no"
+                    android:textSize="16sp"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="?colorAccent"
+                    app:met_singleLineEllipsis="true" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/or" />
 
-                <View
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/et_passport_no"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/spc_1"
-                    android:layout_weight="5"
-                    android:background="@color/colorGray" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="@string/passport_no"
+                    android:inputType="textCapWords"
+                    android:textSize="16sp"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="?colorAccent"
+                    app:met_singleLineEllipsis="true" />
 
             </LinearLayout>
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/et_passport_no"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/passport_no"
-                android:inputType="textCapWords"
-                android:textSize="16sp"
-                app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
-                app:met_singleLineEllipsis="true" />
+
+
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:weightSum="12">-->
+
+                <!--<View-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="@dimen/spc_1"-->
+                    <!--android:layout_weight="5"-->
+                    <!--android:background="@color/colorGray" />-->
+
+                <!---->
+
+                <!--<View-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="@dimen/spc_1"-->
+                    <!--android:layout_weight="5"-->
+                    <!--android:background="@color/colorGray" />-->
+
+            <!--</LinearLayout>-->
+
+
 
             <!--<View-->
             <!--android:layout_width="match_parent"-->
@@ -266,6 +283,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/spc_4"
                     android:layout_weight="1"
+                    android:inputType="number"
                     android:hint="@string/ward_no"
                     android:textSize="16sp"
                     app:met_floatingLabel="highlight"
@@ -291,6 +309,39 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_tole_street_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/tole_street_name"
+                android:inputType="textCapWords"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_vdc_municipality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/vdc_municipality"
+                android:inputType="textCapWords"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_district"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/district"
+                android:inputType="textCapWords"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
                 app:met_primaryColor="?colorAccent"
