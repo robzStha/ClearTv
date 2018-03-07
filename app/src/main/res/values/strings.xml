@@ -35,6 +35,8 @@
     <string name="clear">Clear</string>
     <string name="save">Save</string>
     <string name="sign">Sign</string>
+    <string name="tv_cancel">Cancel</string>
+    <string name="tv_crop">Crop</string>
 
     <string-array name="salutations">
         <item>Mr.</item>
@@ -56,5 +58,17 @@
         <item>Residential</item>
         <item>Enterprise</item>
     </string-array>
+
+    <string name="permission_rationale_camera">This lets you use your camera inside of carecareers. \n\n
+    To enable this, click App Settings below and activate Camera under the Permissions menu.</string>
+
+    <string name="permission_rationale_storage">This lets you access your gallery inside of carecareers. \n\n
+    To enable this, click App Settings below and activate Storage under the Permissions menu.</string>
+
+    <string name="permission_rationale_camera_storage">This lets you use your camera and access gallery inside of carecareers. \n\n
+    To enable this, click App Settings below and activate Camera and Storage under the Permissions menu.</string>
+    <string name="applicant_photo">Applicant\'s Photo</string>
+    <string name="next">Next</string>
+
 
 </resources>

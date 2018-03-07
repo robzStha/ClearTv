@@ -6,45 +6,102 @@
     android:layout_height="match_parent"
     tools:context="com.app.cleartv.CapturePhotos">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:padding="@dimen/spc_16">
 
-        <RelativeLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/tv_applicant_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/spc_8"
+                    android:text="@string/applicant_photo" />
+
+                <Spinner
+                    android:id="@+id/spn_box_cable_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/nationality"
+                    android:padding="@dimen/spc_8" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/darker_gray">
+
+                    <ImageView
+                        android:id="@+id/iv_applicant"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:cropToPadding="true"
+                        android:paddingBottom="@dimen/spc_8"
+                        android:paddingLeft="@dimen/spc_8"
+                        android:paddingRight="@dimen/spc_4"
+                        android:paddingTop="@dimen/spc_8"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@mipmap/ic_launcher"
+                        tools:layout_editor_absoluteX="16dp"
+                        tools:layout_editor_absoluteY="33dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/darker_gray">
+
+                    <ImageView
+                        android:id="@+id/iv_box_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:cropToPadding="true"
+                        android:paddingBottom="@dimen/spc_8"
+                        android:paddingLeft="@dimen/spc_4"
+                        android:paddingRight="@dimen/spc_8"
+                        android:paddingTop="@dimen/spc_8"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@mipmap/ic_launcher"
+                        tools:layout_editor_absoluteX="16dp"
+                        tools:layout_editor_absoluteY="33dp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_next"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/darker_gray">
-
-            <ImageView
-                android:id="@+id/iv_applicant"
-                android:layout_width="165dp"
-                android:layout_height="165dp"
-                android:cropToPadding="true"
-                android:padding="@dimen/spc_16"
-                app:srcCompat="@mipmap/ic_launcher"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="33dp" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spc_1" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/darker_gray">
-
-            <ImageView
-                android:id="@+id/iv_box_card"
-                android:layout_width="165dp"
-                android:layout_height="165dp"
-                android:cropToPadding="true"
-                android:padding="@dimen/spc_16"
-                app:srcCompat="@mipmap/ic_launcher"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="33dp" />
-        </RelativeLayout>
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="bottom"
+            android:text="@string/next" />
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
