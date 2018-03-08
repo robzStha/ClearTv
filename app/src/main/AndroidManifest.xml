@@ -35,13 +35,16 @@
         </activity>
         <activity
             android:name=".SubscriberApplication"
+            android:configChanges="orientation|screenSize"
             android:label="@string/subsc_app_form"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="orientation|screenSize" />
-        <activity android:name=".CapturePhotos" />
-        <activity android:name=".Signature"
-            android:theme="@style/SignatureTheme"
-            android:configChanges="orientation|screenSize"></activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".CapturePhotos"
+            android:label="@string/capture_photo" />
+        <activity
+            android:name=".Signature"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/SignatureTheme"></activity>
     </application>
 
 </manifest>
