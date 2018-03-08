@@ -1,20 +1,28 @@
 package com.app.cleartv;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +35,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     EditText et_salutation;
     @BindView(R.id.sp_nationality)
     Spinner sp_nationality;
+    @BindView(R.id.spn_district)
+    Spinner spn_district;
     @BindView(R.id.et_nationality)
     EditText et_nationality;
     @BindView(R.id.et_applicants_name)
@@ -49,6 +59,20 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscriber_application);
         ButterKnife.bind(this);
+
+        ArrayList<District> districts = new ArrayList<>();
+        JSONArray ja= DataFeeder.District();
+
+        for(int i=0; i<ja.length(); i++){
+            District d = new District();
+            try {
+                d.setDistrict(ja.getJSONObject(i).getString("district"));
+                d.setId(ja.getJSONObject(i).getInt("id"));
+                districts.add(d);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
 //        sp_salutation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -73,6 +97,66 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         iv_salutation_del.setOnClickListener(this);
         rl_sign.setOnClickListener(this);
 
+        DistrictAdapter districtArrayAdapter = new DistrictAdapter(districts);
+        spn_district.setAdapter(districtArrayAdapter);
+
+    }
+
+    public class DistrictAdapter extends BaseAdapter{
+
+        private ArrayList<District> districts;
+
+        public DistrictAdapter(ArrayList<District> districts) {
+            this.districts = districts;
+        }
+
+        @Override
+        public int getCount() {
+            return districts.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return districts.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return districts.get(position).getId();
+        }
+
+        class Holder{
+            private TextView tvCountryName;
+        }
+
+        private LayoutInflater inflater;
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View myView = null;
+            try {
+                Holder holder;
+                myView = convertView;
+
+                if (myView == null) {
+                    inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    myView = inflater.inflate(android.R.layout.simple_spinner_item, null);
+
+                    holder = new Holder();
+                    holder.tvCountryName = (TextView) myView.findViewById(android.R.id.text1);
+                    myView.setTag(holder);
+                } else {
+                    holder = (Holder) myView.getTag();
+                }
+
+                holder.tvCountryName.setText(districts.get(position).getDistrict());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return myView;
+        }
     }
 
     @Override

@@ -9,19 +9,21 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.theartofdev.edmodo.cropper.CropImage;
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -38,6 +40,9 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
 
     @BindView(R.id.btn_next)
     Button btn_next;
+
+    @BindView(R.id.spn_box_cable_photo)
+    Spinner spn_box_cable_photo;
 
     private String imagePath;
 
@@ -65,8 +70,32 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
                 accessCamera();
                 break;
             case R.id.btn_next:
-                Intent i = new Intent(this, SubscriberApplication.class);
-                CapturePhotos.this.startActivity(i);
+//                if(Payload.applicantPhoto.length()>0){
+//                    if(spn_box_cable_photo.getSelectedItemId()==0){
+//
+//                    }else if(spn_box_cable_photo.getSelectedItemId()==1){
+//
+//                    }else
+//                }
+                if (iv_applicant.getDrawable() == null && iv_box_card.getDrawable() == null)
+                    CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_BOX_CARD);
+                else if (spn_box_cable_photo.getSelectedItemId() == 0 && iv_box_card.getDrawable() == null)
+                    CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX);
+                else if (spn_box_cable_photo.getSelectedItemId() == 1 && iv_box_card.getDrawable() == null)
+                    CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CARD);
+                else if (iv_applicant.getDrawable() == null)
+                    CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT);
+                else {
+                    if(spn_box_cable_photo.getSelectedItemId() == 0){
+                        Payload.boxPhoto = encoded;
+                        Payload.cardPhoto = "";
+                    }else {
+                        Payload.cardPhoto = encoded;
+                        Payload.boxPhoto = "";
+                    }
+                    Intent i = new Intent(this, SubscriberApplication.class);
+                    CapturePhotos.this.startActivity(i);
+                }
                 break;
             default:
                 break;
@@ -212,13 +241,24 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
 //            throw new IllegalArgumentException("ImageHelperListener is not set");
 //        } else {
         if (imagePath != null) {
+            imagePath = FileUtils.resizeAndCompressImageBeforeSend(this, imagePath);
+
             Toast.makeText(this, "Path: " + imagePath, Toast.LENGTH_SHORT).show();
 //                if (showCropView) {
-            File imgFile = new File(imagePath);
+            final File imgFile = new File(imagePath);
+            final Bitmap[] myBitmap = new Bitmap[1];
             if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                myBitmap = manageOrientation(myBitmap);
-                iv_selected.setImageBitmap(myBitmap);
+                new Handler().post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        myBitmap[0] = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        myBitmap[0] = manageOrientation(myBitmap[0]);
+                        setImageToPayload(myBitmap[0]);
+                        iv_selected.setImageBitmap(myBitmap[0]);
+                    }
+                });
+//78329
 
 
             }
@@ -245,6 +285,18 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
         } else {
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.IMAGE_ERROR);
         }
+    }
+    String encoded;
+    private void setImageToPayload(Bitmap myBitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        if (iv_selected == iv_box_card) {
+//            Payload.boxCardPhoto = encoded;
+            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
+            else Payload.cardPhoto = encoded;
+        } else Payload.applicantPhoto = encoded;
     }
 
     private Bitmap manageOrientation(Bitmap myBitmap) {

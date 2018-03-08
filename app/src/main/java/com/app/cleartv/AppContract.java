@@ -28,6 +28,10 @@ public class AppContract {
 
     public class Errors {
         public static final String IMAGE_ERROR = "Image not found";
+        public static final String APPLICANT_BOX_CARD = "Please take photos for applicant information";
+        public static final String BOX = "Please take a photo for box number";
+        public static final String CARD = "Please take a photo for card number";
+        public static final String APPLICANT = "Please take a photo for applicant";
     }
 
     public class Permission {
@@ -42,15 +46,16 @@ public class AppContract {
         public static final int GALLERY = 101;
     }
 
-    public class FileType {
-        public static final int COVER_LETTER = 1;
-        public static final int RESUME = 2;
-        public static final int FILE = 3;
-    }
+//    public class FileType {
+//        public static final int COVER_LETTER = 1;
+//        public static final int RESUME = 2;
+//        public static final int FILE = 3;
+//    }
+//
+//    public class OpenType {
+//        public static final int AFTER_LOGIN = 1;
+//        public static final int FORCE_COMPLETE = 2;
+//        public static final int SINGLE_PAGE = 3;
+//    }
 
-    public class OpenType {
-        public static final int AFTER_LOGIN = 1;
-        public static final int FORCE_COMPLETE = 2;
-        public static final int SINGLE_PAGE = 3;
-    }
 }

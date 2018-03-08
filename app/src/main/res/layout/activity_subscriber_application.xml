@@ -320,16 +320,43 @@
                 app:met_primaryColor="?colorAccent"
                 app:met_singleLineEllipsis="true" />
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/et_district"
+            <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+                <!--android:id="@+id/et_district"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/district"-->
+                <!--android:inputType="textCapWords"-->
+                <!--android:textSize="16sp"-->
+                <!--app:met_floatingLabel="highlight"-->
+                <!--app:met_primaryColor="?colorAccent"-->
+                <!--app:met_singleLineEllipsis="true" />-->
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/district"
-                android:inputType="textCapWords"
-                android:textSize="16sp"
-                app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
-                app:met_singleLineEllipsis="true" />
+                android:layout_height="@dimen/spc_45"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/spc_16"
+                android:weightSum="12">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="@string/district"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spn_district"
+                    android:layout_width="0dp"
+                    android:layout_weight="8"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/address"/>
+
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="match_parent"

@@ -29,12 +29,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="@dimen/spc_8"
-                    android:textStyle="bold"
-                    android:text="@string/applicant_photo" />
-
-                <view
-                    android:layout_width="1dp"
-                    android:layout_height="25dp"/>
+                    android:textColor="@android:color/black"
+                    android:text="@string/applicant_photo"
+                    android:textSize="@dimen/txt_16" />
 
                 <Spinner
                     android:id="@+id/spn_box_cable_photo"
@@ -52,11 +49,13 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="250dp"
                     android:layout_weight="1"
-                    android:background="@android:color/white">
+                    android:layout_marginRight="@dimen/spc_4"
+                    android:background="@drawable/bg_shadow">
 
                     <ImageView
                         android:id="@+id/iv_applicant"
@@ -67,48 +66,42 @@
                         android:cropToPadding="true"
                         android:padding="@dimen/spc_4"
                         android:scaleType="centerCrop"
-                        app:srcCompat="@mipmap/ic_launcher"
                         tools:layout_editor_absoluteX="16dp"
                         tools:layout_editor_absoluteY="33dp" />
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="@dimen/spc_35"
+                        android:layout_alignParentBottom="true"
                         android:background="#aa000000"
-                        android:layout_alignParentBottom="true"/>
-
+                        android:layout_margin="@dimen/spc_4"
+                        android:src="@drawable/ic_photo_camera_white_24dp" />
                 </RelativeLayout>
-
-                <View
-                    android:layout_width="@dimen/spc_4"
-                    android:layout_height="250dp"
-                    android:background="#00000000"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="250dp"
                     android:layout_weight="1"
-                    android:background="@android:color/white">
+                    android:layout_marginLeft="@dimen/spc_4"
+                    android:background="@drawable/bg_shadow">
 
                     <ImageView
                         android:id="@+id/iv_box_card"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
                         android:cropToPadding="true"
                         android:padding="@dimen/spc_4"
                         android:scaleType="centerCrop"
-                        app:srcCompat="@mipmap/ic_launcher"
                         tools:layout_editor_absoluteX="16dp"
                         tools:layout_editor_absoluteY="33dp" />
 
-
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="@dimen/spc_35"
+                        android:layout_alignParentBottom="true"
                         android:background="#aa000000"
-                        android:layout_alignParentBottom="true"/>
+                        android:layout_margin="@dimen/spc_4"
+                        android:src="@drawable/ic_photo_camera_white_24dp" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -125,3 +118,4 @@
             android:text="@string/next" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
+
