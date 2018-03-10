@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.app.cleartv;
+package com.app.cleartv.utils;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;

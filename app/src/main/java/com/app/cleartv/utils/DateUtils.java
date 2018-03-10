@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;

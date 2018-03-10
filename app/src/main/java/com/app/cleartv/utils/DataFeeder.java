@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

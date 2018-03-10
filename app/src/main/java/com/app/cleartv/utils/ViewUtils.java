@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.utils;
 
 import android.app.Activity;
 import android.content.Context;

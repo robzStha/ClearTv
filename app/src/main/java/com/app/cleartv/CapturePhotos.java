@@ -23,6 +23,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.app.cleartv.fragments.ImageHelperFragment;
+import com.app.cleartv.utils.AppContract;
+import com.app.cleartv.utils.CustomAlertDialog;
+import com.app.cleartv.utils.FileUtils;
+import com.app.cleartv.utils.Payload;
+import com.app.cleartv.utils.ViewUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;

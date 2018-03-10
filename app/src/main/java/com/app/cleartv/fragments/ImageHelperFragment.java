@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.fragments;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -15,6 +15,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
+
+import com.app.cleartv.R;
+import com.app.cleartv.utils.AppContract;
+import com.app.cleartv.utils.CustomAlertDialog;
+import com.app.cleartv.utils.FileUtils;
+import com.app.cleartv.utils.ViewUtils;
 
 import java.io.File;
 

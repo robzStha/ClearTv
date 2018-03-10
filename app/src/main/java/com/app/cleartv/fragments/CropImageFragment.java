@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.app.cleartv.R;
+import com.app.cleartv.utils.AppContract;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;

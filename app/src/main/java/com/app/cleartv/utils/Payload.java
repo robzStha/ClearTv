@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.utils;
 
 /**
  * Created by Dell on 3/8/2018.

@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.utils;
 
 public class AppContract {
     private AppContract() {

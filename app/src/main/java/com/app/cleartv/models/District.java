@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.models;
 
 public class District {
     private Integer id;

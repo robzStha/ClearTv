@@ -180,6 +180,31 @@
                 android:layout_marginBottom="@dimen/spc_8"
                 android:background="@color/colorPrimary" />
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spc_45"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="@string/type"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sp_identification"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:entries="@array/identification_type"
+                    android:visibility="visible"></Spinner>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -187,34 +212,34 @@
                 android:weightSum="15">
 
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/et_citizenship_no"
+                    android:id="@+id/et_citizen_passport"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="7"
+                    android:layout_weight="15"
                     android:hint="@string/citizen_no"
                     android:textSize="16sp"
                     app:met_floatingLabel="highlight"
                     app:met_primaryColor="?colorAccent"
                     app:met_singleLineEllipsis="true" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/or" />
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/or" />-->
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/et_passport_no"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:hint="@string/passport_no"
-                    android:inputType="textCapWords"
-                    android:textSize="16sp"
-                    app:met_floatingLabel="highlight"
-                    app:met_primaryColor="?colorAccent"
-                    app:met_singleLineEllipsis="true" />
+                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+                    <!--android:id="@+id/et_passport_no"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="7"-->
+                    <!--android:hint="@string/passport_no"-->
+                    <!--android:inputType="textCapWords"-->
+                    <!--android:textSize="16sp"-->
+                    <!--app:met_floatingLabel="highlight"-->
+                    <!--app:met_primaryColor="?colorAccent"-->
+                    <!--app:met_singleLineEllipsis="true" />-->
 
             </LinearLayout>
 
@@ -424,6 +449,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/private_job"
+                    android:checked="true"
                     android:textSize="@dimen/txt_16" />
 
                 <RadioButton

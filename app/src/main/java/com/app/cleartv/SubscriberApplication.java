@@ -12,20 +12,29 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.app.cleartv.models.Customer;
+import com.app.cleartv.models.District;
+import com.app.cleartv.network_protocol.ApiCalls;
+import com.app.cleartv.network_protocol.RetrofitSingleton;
+import com.app.cleartv.utils.CommonMethods;
+import com.app.cleartv.utils.CustomAlertDialog;
+import com.app.cleartv.utils.DataFeeder;
+
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
 
 public class SubscriberApplication extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
@@ -35,12 +44,20 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     EditText et_salutation;
     @BindView(R.id.sp_nationality)
     Spinner sp_nationality;
+    @BindView(R.id.sp_identification)
+    Spinner sp_identification;
     @BindView(R.id.spn_district)
     Spinner spn_district;
     @BindView(R.id.et_nationality)
     EditText et_nationality;
+    @BindView(R.id.et_citizen_passport)
+    EditText et_citizen_passport;
+    @BindView(R.id.et_email)
+    EditText et_email;
     @BindView(R.id.et_applicants_name)
     EditText et_applicants_name;
+    @BindView(R.id.et_tole_street_name)
+    EditText et_tole_street_name;
     @BindView(R.id.iv_nationality_del)
     ImageView iv_nationality_del;
     @BindView(R.id.iv_salutation_del)
@@ -53,17 +70,22 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     RelativeLayout rl_sign;
     @BindView(R.id.iv_sign)
     ImageView iv_sign;
+    @BindView(R.id.btn_login_submit)
+    Button btn_login_submit;
+
+    ApiCalls apiCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscriber_application);
         ButterKnife.bind(this);
+        apiCalls = RetrofitSingleton.getApiCalls();
 
         ArrayList<District> districts = new ArrayList<>();
-        JSONArray ja= DataFeeder.District();
+        JSONArray ja = DataFeeder.District();
 
-        for(int i=0; i<ja.length(); i++){
+        for (int i = 0; i < ja.length(); i++) {
             District d = new District();
             try {
                 d.setDistrict(ja.getJSONObject(i).getString("district"));
@@ -73,6 +95,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 e.printStackTrace();
             }
         }
+
+//        sp_salutation.on
 
 //        sp_salutation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -90,6 +114,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //        });
         sp_salutation.setOnItemSelectedListener(this);
         sp_nationality.setOnItemSelectedListener(this);
+        sp_identification.setOnItemSelectedListener(this);
 
 //        et_salutation.setOnTouchListener(this);
 //        et_nationality.setOnTouchListener(this);
@@ -97,12 +122,56 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         iv_salutation_del.setOnClickListener(this);
         rl_sign.setOnClickListener(this);
 
+        ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.districts));
         DistrictAdapter districtArrayAdapter = new DistrictAdapter(districts);
-        spn_district.setAdapter(districtArrayAdapter);
+        spn_district.setAdapter(districtAdapter);
+
+        btn_login_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Validate();
+//                Call<Customer> customer = apiCalls.createCustomer()
+            }
+        });
+    }
+
+    private String getSalutation() {
+        return sp_salutation.getVisibility() == View.VISIBLE ? sp_salutation.getSelectedItem().toString() : et_salutation.getText().toString();
+    }
+
+    private String getNationality() {
+        return sp_nationality.getVisibility() == View.VISIBLE ? sp_nationality.getSelectedItem().toString() : et_nationality.getText().toString();
+    }
+
+    private String getCitizenPassport() {
+        return et_citizen_passport.getText().toString();
+    }
+
+    private boolean isPassport() {
+        return sp_identification.getSelectedItemPosition() == 0 ? false : true;
+    }
+
+
+    private void Validate() {
+
+        if (getSalutation().equals(""))
+            CustomAlertDialog.showAlertDialog(this, "Please enter the title");
+        else if (et_applicants_name.getText().length() == 0)
+            CustomAlertDialog.showAlertDialog(this, "Please enter the applicant's name");
+        else if (getNationality().equals(""))
+            CustomAlertDialog.showAlertDialog(this, "Please enter the applicant's nationality");
+        else if(/*isPassport() && */getCitizenPassport().equals(""))
+            CustomAlertDialog.showAlertDialog(this, "Please enter the identification detail of applicant");
+        else if(et_tole_street_name.getText().toString().equals(""))
+            CustomAlertDialog.showAlertDialog(this, "Please enter the tole / street name of applicant");
+        else if(!CommonMethods.isValidEmail(et_email.getText()))
+            CustomAlertDialog.showAlertDialog(this, "Please enter a valid email");
+        else if(current_bmp==null)
+            CustomAlertDialog.showAlertDialog(this, "Please provide applicant's signatures");
 
     }
 
-    public class DistrictAdapter extends BaseAdapter{
+    public class DistrictAdapter extends BaseAdapter {
 
         private ArrayList<District> districts;
 
@@ -125,7 +194,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             return districts.get(position).getId();
         }
 
-        class Holder{
+        class Holder {
             private TextView tvCountryName;
         }
 
@@ -165,6 +234,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             ShowETSalutation(i);
         } else if (adapterView == sp_nationality) {
             ShowETNationality(i);
+        } else if (adapterView == sp_identification) {
+            et_citizen_passport.setHint(sp_identification.getSelectedItemPosition() == 0 ? getString(R.string.citizen_no) : getString(R.string.passport_no));
         }
     }
 
@@ -250,7 +321,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1 && resultCode == RESULT_OK){
+        if (requestCode == 1 && resultCode == RESULT_OK) {
 //            editorBitmapArray.add(current_bmp);
 //            current_bmp = data.get
             byte[] byteArray = data.getByteArrayExtra("sign");

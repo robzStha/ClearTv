@@ -1,4 +1,4 @@
-package com.app.cleartv;
+package com.app.cleartv.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.ViewUtils;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.io.File;
@@ -94,6 +95,10 @@ public class CommonMethods {
             }
         }
         return filePath;
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
 }

@@ -25,3 +25,10 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    okhttpVersion = '3.4.2'
+    gsonVersion = '2.8.0'
+    gsonConverterVersion = '2.3.0'
+    picassoVersion = '2.6.0'
+}
