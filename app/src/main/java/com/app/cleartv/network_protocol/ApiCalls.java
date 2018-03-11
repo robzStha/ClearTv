@@ -16,6 +16,7 @@ public interface ApiCalls {
                                   @Field("Title") String title,
                                   @Field("ApplicantName") String name,
                                   @Field("ApplicantPhoto") String applicantPhoto,
+                                  @Field("Gender") String gender,
                                   @Field("PHouseNo") String houseNo,
                                   @Field("PWardNo") String wardNo,
                                   @Field("PStreetName") String street,

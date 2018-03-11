@@ -38,6 +38,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okhttpVersion"
     implementation "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.gsonConverterVersion"
-
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.rxjavaVersion"
+    implementation "codelight.studios:android-smart-login:1.2"
 
 }

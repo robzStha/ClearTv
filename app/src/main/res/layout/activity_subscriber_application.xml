@@ -460,7 +460,7 @@
                     android:textSize="@dimen/txt_16" />
 
                 <RadioButton
-                    android:id="@+id/radio_non_profitable_jobb"
+                    android:id="@+id/radio_non_profitable_job"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/non_profitable_job"

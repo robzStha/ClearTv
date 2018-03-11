@@ -55,6 +55,7 @@ public class RetrofitSingleton {
         retrofit = new Retrofit.Builder().
                 baseUrl(UrlHelper.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         apiCalls = retrofit.create(ApiCalls.class);
 
@@ -67,8 +68,8 @@ public class RetrofitSingleton {
         return apiCalls;
     }
 
-    public static Retrofit getRetrofit(){
-        if(retrofitSingleton == null){
+    public static Retrofit getRetrofit() {
+        if (retrofitSingleton == null) {
             retrofitSingleton = new RetrofitSingleton();
         }
         return retrofit;

@@ -10,6 +10,6 @@ public class Payload {
     public static String boxPhoto = "";
     public static String cardPhoto = "";
     public static String boxCardPhoto = "";
-
-
+    public static String applicantSign="";
+    public static String fingerPrint="";
 }

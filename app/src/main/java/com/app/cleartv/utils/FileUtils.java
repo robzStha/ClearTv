@@ -33,6 +33,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.provider.DocumentFile;
+import android.util.Base64;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -190,6 +191,13 @@ public class FileUtils {
             }
         }
         return null;
+    }
+
+    public static String convertBitmapToBase64(Bitmap myBitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
     /**

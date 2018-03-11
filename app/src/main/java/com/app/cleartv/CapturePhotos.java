@@ -295,16 +295,15 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
     }
     String encoded;
     private void setImageToPayload(Bitmap myBitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        encoded = FileUtils.convertBitmapToBase64(myBitmap);
         if (iv_selected == iv_box_card) {
 //            Payload.boxCardPhoto = encoded;
             if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
             else Payload.cardPhoto = encoded;
         } else Payload.applicantPhoto = encoded;
     }
+
+
 
     private Bitmap manageOrientation(Bitmap myBitmap) {
         ExifInterface exif = null;
