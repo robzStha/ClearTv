@@ -41,6 +41,10 @@ public interface ApiCalls {
                                   @Field("FingerPrint") String fingerprint
     );
 
+//    @FormUrlEncoded
+//    @POST("/token")
+//    Call
+
 //    @GET("menu_category")
 //    Call<CategoryNewsListing> getMenuCategories();
 //

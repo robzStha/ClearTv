@@ -48,7 +48,8 @@
             android:name=".Signature"
             android:configChanges="orientation|screenSize"
             android:theme="@style/SignatureTheme" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login"
+            android:theme="@style/LoginTheme"></activity>
     </application>
 
 </manifest>
