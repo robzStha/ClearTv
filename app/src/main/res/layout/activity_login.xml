@@ -42,12 +42,30 @@
             app:met_primaryColor="?colorAccent"
             app:met_singleLineEllipsis="true" />
 
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spc_30"
-            android:text="@string/login" />
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btn_login"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-13dp"
+                android:text="@string/login" />
+        </LinearLayout>
     </LinearLayout>
 
 

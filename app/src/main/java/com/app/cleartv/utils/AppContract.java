@@ -6,16 +6,11 @@ public class AppContract {
 
 
     public class Preferences {
-        public final static String IS_LOGGED_IN = "is_logged_in";
-        public final static String AUTHORIZATION_KEY = "authorization_key";// token generated after basic getAuthenticationToken
         public final static String ACCESS_TOKEN = "access_token";//Logged user access token
-        public final static String CANDIDATE_ID = "candidate_id";
+        public final static String APPLICANT_ID = "applicant_id"; //Applicant id
+        public final static String USER_ID = "user_id"; //Logged user id
         public final static String EXPIRES_IN = "expires_in";
         public final static String REFRESH_TOKEN = "refresh_token";
-        public final static String TOKEN_TYPE = "token_type";
-        public final static String FIRST_NAME = "first_name";
-        public final static String LAST_NAME = "last_name";
-        public final static String EMAIL = "email";
 
     }
 
@@ -44,6 +39,7 @@ public class AppContract {
     public class RequestCode {
         public static final int CAMERA = 100;
         public static final int GALLERY = 101;
+        public static final int SIGNATURE = 102;
     }
 
 //    public class FileType {

@@ -160,4 +160,7 @@
         <item>Passport No</item>
     </string-array>
 
+    <string name="grant_type">password</string>
+    <string name="submit">Submit</string>
+
 </resources>
