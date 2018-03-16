@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -130,6 +131,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     RadioGroup radio_occupation;
     @BindView(R.id.ll_wrapper)
     LinearLayout ll_wrapper;
+    @BindView(R.id.pb_loading)
+    ProgressBar pb_loading;
 
     ImageView iv_selected;
 
@@ -155,6 +158,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         setContentView(R.layout.activity_subscriber_application);
         ButterKnife.bind(this);
 
+        CommonMethods.keyboardSetup(ll_wrapper, this);
         mPref = new MySharedPreference(this);
         pd = new ProgressDialog(this);
         pd.setMessage("Uploading applicant details");
@@ -218,9 +222,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         btn_login_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pd.show();
+                pb_loading.setVisibility(View.VISIBLE);
                 if (isValid()) {
                     if (MyApplication.hasNetwork()) {
+                        pd.show();
+                        pb_loading.setVisibility(View.INVISIBLE);
 
                         printPostData();
 
@@ -337,6 +343,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         iv_applicant.setImageDrawable(null);
         iv_box_card.setImageDrawable(null);
         iv_sign.setImageDrawable(null);
+        et_applicants_name.requestFocus();
     }
 
     private void clearEditText(ViewGroup group) {
@@ -445,47 +452,47 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         boolean isValid = true;
 
         if (getSalutation().equals("")) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, "Please enter the title");
             isValid = false;
         } else if (et_applicants_name.getText().length() == 0) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, "Please enter the applicant's name");
             isValid = false;
         } else if (getNationality().equals("")) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, "Please enter the applicant's nationality");
             isValid = false;
         } else if (/*isPassport() && */getCitizenPassport().equals("")) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, "Please enter the identification detail of applicant");
             isValid = false;
         } else if (et_tole_street_name.getText().toString().equals("")) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, "Please enter the tole / street name of applicant");
             isValid = false;
         } else if (!CommonMethods.isValidEmail(et_email.getText())) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, "Please enter a valid email");
             isValid = false;
         } else if (current_bmp == null) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, "Please provide applicant's signatures");
             isValid = false;
         } else if (iv_applicant.getDrawable() == null && iv_box_card.getDrawable() == null) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_BOX_CARD);
             isValid = false;
         } else if (spn_box_cable_photo.getSelectedItemId() == 0 && iv_box_card.getDrawable() == null) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX);
             isValid = false;
         } else if (spn_box_cable_photo.getSelectedItemId() == 1 && iv_box_card.getDrawable() == null) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CARD);
             isValid = false;
         } else if (iv_applicant.getDrawable() == null) {
-            pd.hide();
+            pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT);
             isValid = false;
         } else {
@@ -661,6 +668,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case AppContract.RequestCode.SIGNATURE:
+                    rl_sign.setFocusable(true);
+                    rl_sign.requestFocus();
                     byte[] byteArray = data.getByteArrayExtra("sign");
                     current_bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                     Payload.applicantSign = Base64.encodeToString(byteArray, Base64.NO_WRAP).trim();
@@ -672,6 +681,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 default:
                     break;
             }
+        }else {
+            rl_sign.setFocusable(true);
+            rl_sign.requestFocus();
         }
 
     }
@@ -815,13 +827,15 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     private boolean showCropView, compressImage;
 
     private void sendBackImagePath() {
+        iv_selected.setFocusable(true);
+        iv_selected.setFocusableInTouchMode(true);
 //        if (listener == null) {
 //            throw new IllegalArgumentException("ImageHelperListener is not set");
 //        } else {
         if (imagePath != null) {
             imagePath = FileUtils.resizeAndCompressImageBeforeSend(this, imagePath);
 
-            Toast.makeText(this, "Path: " + imagePath, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Path: " + imagePath, Toast.LENGTH_SHORT).show();
 //                if (showCropView) {
             final File imgFile = new File(imagePath);
             if (imgFile.exists()) {

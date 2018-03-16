@@ -73,8 +73,11 @@
                 android:id="@+id/et_applicants_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:hint="@string/applicants_name"
                 android:inputType="textCapWords"
+                android:nextFocusDown="@+id/sp_gender"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
                 app:met_primaryColor="?colorAccent"
@@ -100,7 +103,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
-                    android:entries="@array/gender"></Spinner>
+                    android:entries="@array/gender"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:nextFocusDown="@+id/sp_nationality"></Spinner>
 
             </LinearLayout>
 
@@ -224,23 +230,23 @@
                     app:met_singleLineEllipsis="true" />
 
                 <!--<TextView-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:gravity="center"-->
-                    <!--android:text="@string/or" />-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/or" />-->
 
                 <!--<com.rengwuxian.materialedittext.MaterialEditText-->
-                    <!--android:id="@+id/et_passport_no"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="7"-->
-                    <!--android:hint="@string/passport_no"-->
-                    <!--android:inputType="textCapWords"-->
-                    <!--android:textSize="16sp"-->
-                    <!--app:met_floatingLabel="highlight"-->
-                    <!--app:met_primaryColor="?colorAccent"-->
-                    <!--app:met_singleLineEllipsis="true" />-->
+                <!--android:id="@+id/et_passport_no"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="7"-->
+                <!--android:hint="@string/passport_no"-->
+                <!--android:inputType="textCapWords"-->
+                <!--android:textSize="16sp"-->
+                <!--app:met_floatingLabel="highlight"-->
+                <!--app:met_primaryColor="?colorAccent"-->
+                <!--app:met_singleLineEllipsis="true" />-->
 
             </LinearLayout>
 
@@ -302,8 +308,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/spc_4"
                     android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:hint="@string/house_no"
                     android:inputType="number"
+                    android:nextFocusDown="@+id/et_ward_no"
                     android:textSize="16sp"
                     app:met_floatingLabel="highlight"
                     app:met_primaryColor="?colorAccent"
@@ -315,6 +324,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/spc_4"
                     android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:hint="@string/ward_no"
                     android:inputType="number"
                     android:textSize="16sp"
@@ -347,23 +358,23 @@
                 app:met_singleLineEllipsis="true" />
 
             <!--<com.rengwuxian.materialedittext.MaterialEditText-->
-                <!--android:id="@+id/et_district"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="@string/district"-->
-                <!--android:inputType="textCapWords"-->
-                <!--android:textSize="16sp"-->
-                <!--app:met_floatingLabel="highlight"-->
-                <!--app:met_primaryColor="?colorAccent"-->
-                <!--app:met_singleLineEllipsis="true" />-->
+            <!--android:id="@+id/et_district"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="@string/district"-->
+            <!--android:inputType="textCapWords"-->
+            <!--android:textSize="16sp"-->
+            <!--app:met_floatingLabel="highlight"-->
+            <!--app:met_primaryColor="?colorAccent"-->
+            <!--app:met_singleLineEllipsis="true" />-->
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spc_45"
+                android:layout_marginBottom="@dimen/spc_16"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/spc_16"
                 android:weightSum="12">
 
                 <TextView
@@ -377,9 +388,9 @@
                 <Spinner
                     android:id="@+id/spn_district"
                     android:layout_width="0dp"
-                    android:layout_weight="8"
                     android:layout_height="wrap_content"
-                    android:prompt="@string/address"/>
+                    android:layout_weight="8"
+                    android:prompt="@string/address" />
 
             </LinearLayout>
 
@@ -449,8 +460,8 @@
                     android:id="@+id/radio_private_job"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/private_job"
                     android:checked="true"
+                    android:text="@string/private_job"
                     android:textSize="@dimen/txt_16" />
 
                 <RadioButton
@@ -595,7 +606,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:layout_marginBottom="@dimen/spc_16"
-                android:background="@drawable/rounded_bg">
+                android:background="@drawable/rounded_bg"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <ImageView
                     android:id="@+id/iv_sign"
@@ -607,12 +620,12 @@
                     android:layout_height="@dimen/spc_30"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:gravity="center"
-                    android:textAllCaps="true"
-                    android:textStyle="normal"
                     android:background="@drawable/bottom_right_rounded_bg"
+                    android:gravity="center"
                     android:text="@string/sign"
-                    android:textColor="@android:color/white" />
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/white"
+                    android:textStyle="normal" />
 
             </RelativeLayout>
 
@@ -629,8 +642,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:weightSum="2">
 
                         <TextView
@@ -639,8 +652,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="@dimen/spc_8"
-                            android:textColor="@android:color/black"
                             android:text="@string/applicant_photo"
+                            android:textColor="@android:color/black"
                             android:textSize="@dimen/txt_16" />
 
                         <Spinner
@@ -663,8 +676,8 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="250dp"
-                            android:layout_weight="1"
                             android:layout_marginRight="@dimen/spc_4"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_shadow">
 
                             <ImageView
@@ -683,16 +696,16 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/spc_35"
                                 android:layout_alignParentBottom="true"
-                                android:background="#aa000000"
                                 android:layout_margin="@dimen/spc_4"
+                                android:background="#aa000000"
                                 android:src="@drawable/ic_photo_camera_white_24dp" />
                         </RelativeLayout>
 
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="250dp"
-                            android:layout_weight="1"
                             android:layout_marginLeft="@dimen/spc_4"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_shadow">
 
                             <ImageView
@@ -709,8 +722,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/spc_35"
                                 android:layout_alignParentBottom="true"
-                                android:background="#aa000000"
                                 android:layout_margin="@dimen/spc_4"
+                                android:background="#aa000000"
                                 android:src="@drawable/ic_photo_camera_white_24dp" />
                         </RelativeLayout>
                     </LinearLayout>
@@ -718,23 +731,40 @@
                 </LinearLayout>
 
                 <!--<Button-->
-                    <!--android:id="@+id/btn_next"-->
-                    <!--style="@style/Widget.AppCompat.Button.Colored"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentBottom="true"-->
-                    <!--android:layout_alignParentStart="true"-->
-                    <!--android:layout_gravity="bottom"-->
-                    <!--android:text="@string/next" />-->
+                <!--android:id="@+id/btn_next"-->
+                <!--style="@style/Widget.AppCompat.Button.Colored"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:layout_gravity="bottom"-->
+                <!--android:text="@string/next" />-->
             </RelativeLayout>
 
-
-            <Button
-                android:id="@+id/btn_login_submit"
-                style="@style/Widget.AppCompat.Button.Colored"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/login_submit" />
+                android:layout_marginTop="@dimen/spc_30"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:id="@+id/pb_loading"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btn_login_submit"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="-13dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_submit" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>
