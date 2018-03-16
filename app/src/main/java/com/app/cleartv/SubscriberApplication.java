@@ -1,6 +1,7 @@
 package com.app.cleartv;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,6 +28,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -123,6 +125,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     Button btn_login_submit;
     @BindView(R.id.radio_occupation)
     RadioGroup radio_occupation;
+    @BindView(R.id.ll_wrapper)
+    LinearLayout ll_wrapper;
 
     ImageView iv_selected;
 
@@ -134,6 +138,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     @BindView(R.id.spn_box_cable_photo)
     Spinner spn_box_cable_photo;
+
+    ProgressDialog pd;
 
     private String imagePath;
 
@@ -147,6 +153,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         ButterKnife.bind(this);
 
         mPref = new MySharedPreference(this);
+        pd = new ProgressDialog(this);
+        pd.setMessage("Uploading applicant details");
+        pd.setCancelable(false);
+        pd.setCanceledOnTouchOutside(false);
 
         if (!mPref.getStringValues(AppContract.Preferences.ACCESS_TOKEN).isEmpty())
             btn_login_submit.setText(R.string.submit);
@@ -205,6 +215,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         btn_login_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pd.show();
                 if (isValid()) {
                     if (MyApplication.hasNetwork()) {
 
@@ -252,13 +263,26 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                                     }
                                 } else if (response != null && response.isSuccessful()) {
                                     System.out.println("Rabin is testing: success");
+                                    CustomAlertDialog.showAlertDialogWithCallback(SubscriberApplication.this, "Applicant details saved successfully", new CustomAlertDialog.ConfirmationDialogCallback() {
+                                        @Override
+                                        public void onOkClicked() {
+                                            resetForm();
+                                        }
+
+                                        @Override
+                                        public void onCancelClicked() {
+
+                                        }
+                                    });
                                 }
+                                pd.hide();
                             }
 
                             @Override
                             public void onFailure(Call<Customer> call, Throwable t) {
                                 System.out.println("Issue here");
                                 t.printStackTrace();
+                                pd.hide();
                             }
                         });
                     } else
@@ -295,6 +319,33 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //            });
 
         });
+    }
+
+    private void resetForm() {
+        sp_salutation.setSelection(0);
+        Payload.reset();
+        clearEditText(ll_wrapper);
+        spn_gender.setSelection(0);
+        sp_nationality.setSelection(0);
+        sp_identification.setSelection(0);
+        spn_box_cable_photo.setSelection(0);
+        sp_subscription_type.setSelection(0);
+        spn_district.setSelection(0);
+        iv_applicant.setImageDrawable(null);
+        iv_box_card.setImageDrawable(null);
+        iv_sign.setImageDrawable(null);
+    }
+
+    private void clearEditText(ViewGroup group) {
+        for (int i = 0, count = group.getChildCount(); i < count; ++i) {
+            View view = group.getChildAt(i);
+            if (view instanceof EditText) {
+                ((EditText)view).getText().clear();
+            }
+            if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
+                clearEditText((ViewGroup)view);
+
+        }
     }
 
     private void printPostData() {
@@ -358,36 +409,47 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         boolean isValid = true;
 
         if (getSalutation().equals("")) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, "Please enter the title");
             isValid = false;
         } else if (et_applicants_name.getText().length() == 0) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, "Please enter the applicant's name");
             isValid = false;
         } else if (getNationality().equals("")) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, "Please enter the applicant's nationality");
             isValid = false;
         } else if (/*isPassport() && */getCitizenPassport().equals("")) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, "Please enter the identification detail of applicant");
             isValid = false;
         } else if (et_tole_street_name.getText().toString().equals("")) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, "Please enter the tole / street name of applicant");
             isValid = false;
         } else if (!CommonMethods.isValidEmail(et_email.getText())) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, "Please enter a valid email");
             isValid = false;
         } else if (current_bmp == null) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, "Please provide applicant's signatures");
             isValid = false;
         } else if (iv_applicant.getDrawable() == null && iv_box_card.getDrawable() == null) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_BOX_CARD);
             isValid = false;
         } else if (spn_box_cable_photo.getSelectedItemId() == 0 && iv_box_card.getDrawable() == null) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX);
             isValid = false;
         } else if (spn_box_cable_photo.getSelectedItemId() == 1 && iv_box_card.getDrawable() == null) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CARD);
             isValid = false;
         } else if (iv_applicant.getDrawable() == null) {
+            pd.hide();
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT);
             isValid = false;
         } else {

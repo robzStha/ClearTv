@@ -162,5 +162,6 @@
 
     <string name="grant_type">password</string>
     <string name="submit">Submit</string>
+    <string name="logout">Log Out</string>
 
 </resources>
