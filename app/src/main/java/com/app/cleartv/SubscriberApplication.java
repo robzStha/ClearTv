@@ -565,7 +565,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 case AppContract.RequestCode.SIGNATURE:
                     byte[] byteArray = data.getByteArrayExtra("sign");
                     current_bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                    Payload.applicantSign = Base64.encodeToString(byteArray, Base64.DEFAULT).trim();
+                    Payload.applicantSign = Base64.encodeToString(byteArray, Base64.NO_WRAP).trim();
                     iv_sign.setImageBitmap(current_bmp);
                     break;
                 case AppContract.RequestCode.CAMERA:
