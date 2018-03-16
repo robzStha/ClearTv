@@ -302,7 +302,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: Salutation " + getSalutation());
         System.out.println("Rabin is testing: Applicant Name " + et_applicants_name.getText().toString());
         if(Payload.applicantPhoto.length()>0)
-        System.out.println("Rabin is testing: Applicant Photo");
+        System.out.println("Rabin is testing: Applicant Photo"+ Payload.applicantPhoto);
         System.out.println("Rabin is testing: Gender " + spn_gender.getSelectedItem().toString());
         System.out.println("Rabin is testing: House No " + et_house_no.getText().toString());
         System.out.println("Rabin is testing: Ward No " + et_ward_no.getText().toString());
@@ -565,7 +565,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 case AppContract.RequestCode.SIGNATURE:
                     byte[] byteArray = data.getByteArrayExtra("sign");
                     current_bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                    Payload.applicantSign = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Payload.applicantSign = Base64.encodeToString(byteArray, Base64.DEFAULT).trim();
                     iv_sign.setImageBitmap(current_bmp);
                     break;
                 case AppContract.RequestCode.CAMERA:
