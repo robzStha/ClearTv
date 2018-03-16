@@ -20,6 +20,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -345,6 +348,39 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
                 clearEditText((ViewGroup)view);
 
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.subscriber_application_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                CustomAlertDialog.showLogOutWithCallback(SubscriberApplication.this, "Are you sure you want to log out?", new CustomAlertDialog.ConfirmationDialogCallback() {
+                    @Override
+                    public void onOkClicked() {
+                        mPref.clearData();
+                        Intent i = new Intent(SubscriberApplication.this, Login.class);
+                        startActivity(i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelClicked() {
+                    }
+                });
+
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
         }
     }
 
