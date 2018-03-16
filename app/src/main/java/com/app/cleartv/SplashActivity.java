@@ -14,8 +14,8 @@ public class SplashActivity extends AppCompatActivity {
 //        setContentView(R.layout.activity_splash);
         context = this;
         Intent intent = new Intent();
-        intent.setClass(context, Login.class);
-//        intent.setClass(context, CapturePhotos.class);
+//        intent.setClass(context, Login.class);
+        intent.setClass(context, CapturePhotos.class);
 //        intent.setClass(context, SubscriberApplication.class);
 //        intent.setClass(context, Signature.class);
         context.startActivity(intent);
