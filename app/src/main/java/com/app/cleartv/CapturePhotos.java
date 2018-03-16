@@ -77,13 +77,6 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
                 accessCamera();
                 break;
             case R.id.btn_next:
-//                if(Payload.applicantPhoto.length()>0){
-//                    if(spn_box_cable_photo.getSelectedItemId()==0){
-//
-//                    }else if(spn_box_cable_photo.getSelectedItemId()==1){
-//
-//                    }else
-//                }
                 if (iv_applicant.getDrawable() == null && iv_box_card.getDrawable() == null)
                     CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_BOX_CARD);
                 else if (spn_box_cable_photo.getSelectedItemId() == 0 && iv_box_card.getDrawable() == null)
