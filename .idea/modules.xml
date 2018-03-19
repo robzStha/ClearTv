@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ClearTv.iml" filepath="$PROJECT_DIR$/ClearTv.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libBioMini/libBioMini.iml" filepath="$PROJECT_DIR$/libBioMini/libBioMini.iml" />
     </modules>
   </component>
 </project>

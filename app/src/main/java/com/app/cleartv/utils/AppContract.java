@@ -42,6 +42,11 @@ public class AppContract {
         public static final int SIGNATURE = 102;
     }
 
+    public class PARAMS {
+        public static final String USB_DEVICE_DETACHED = "android.hardware.usb.action.USB_DEVICE_DETACHED";
+        public static final String USB_DEVICE_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
+    }
+
 //    public class FileType {
 //        public static final int COVER_LETTER = 1;
 //        public static final int RESUME = 2;

@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
@@ -30,13 +30,12 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.simplify:ink:1.0.1'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.6+'
-
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-
     implementation "com.squareup.okhttp3:okhttp:$rootProject.ext.okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okhttpVersion"
     implementation "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.gsonConverterVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.rxjavaVersion"
+    implementation project(':libBioMini')
 }

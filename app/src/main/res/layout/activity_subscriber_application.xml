@@ -741,6 +741,11 @@
                 <!--android:text="@string/next" />-->
             </RelativeLayout>
 
+            <ImageView
+                android:id="@+id/iv_finger_print"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -761,10 +766,12 @@
                     android:id="@+id/btn_login_submit"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="-13dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-13dp"
                     android:text="@string/login_submit" />
             </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -1,13 +1,18 @@
 package com.app.cleartv;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbManager;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -19,6 +24,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,10 +51,10 @@ import com.app.cleartv.fragments.ImageHelperFragment;
 import com.app.cleartv.models.Customer;
 import com.app.cleartv.models.CustomerErrorResponse;
 import com.app.cleartv.models.District;
-import com.app.cleartv.models.LoginErrorResponse;
 import com.app.cleartv.network_protocol.ApiCalls;
 import com.app.cleartv.network_protocol.RetrofitSingleton;
 import com.app.cleartv.utils.AppContract;
+import com.app.cleartv.utils.BioMiniHelper;
 import com.app.cleartv.utils.CommonMethods;
 import com.app.cleartv.utils.CustomAlertDialog;
 import com.app.cleartv.utils.DataFeeder;
@@ -56,6 +62,9 @@ import com.app.cleartv.utils.FileUtils;
 import com.app.cleartv.utils.MySharedPreference;
 import com.app.cleartv.utils.Payload;
 import com.app.cleartv.utils.ViewUtils;
+import com.suprema.BioMiniAndroid;
+import com.suprema.IBioMiniCallback;
+import com.suprema.IBioMiniDeviceCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,7 +72,9 @@ import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -142,6 +153,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @BindView(R.id.iv_box_card)
     ImageView iv_box_card;
 
+    @BindView(R.id.iv_finger_print)
+    ImageView iv_finger_print;
+
     @BindView(R.id.spn_box_cable_photo)
     Spinner spn_box_cable_photo;
 
@@ -151,6 +165,13 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     ApiCalls apiCalls;
     private MySharedPreference mPref;
+    private BioMiniAndroid mBioMiniHandle;
+    private BioMiniAndroid.ECODE ufa_res;
+    private boolean isUFAInitialized = false;
+    private Context mApplicationContext;
+    private UsbManager mUsbManager;
+    private boolean mUseUsbManager;
+    private ProgressDialog pdFP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +185,12 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         pd.setMessage("Uploading applicant details");
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
+
+
+        registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
+        registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_DETACHED));
+
+        findBioMini();
 
         if (!mPref.getStringValues(AppContract.Preferences.ACCESS_TOKEN).isEmpty())
             btn_login_submit.setText(R.string.submit);
@@ -209,6 +236,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         iv_nationality_del.setOnClickListener(this);
         iv_salutation_del.setOnClickListener(this);
         rl_sign.setOnClickListener(this);
+        iv_finger_print.setOnClickListener(this);
 
         iv_applicant.setOnClickListener(this);
         iv_box_card.setOnClickListener(this);
@@ -330,6 +358,145 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         });
     }
 
+    private boolean findBioMini() {
+        boolean isDeviceAvailable = true;
+        // Allocate SDK instance
+        if (mBioMiniHandle == null) {
+            if (!mUseUsbManager) {
+                mBioMiniHandle = new BioMiniAndroid(this);
+            } else {
+                mApplicationContext = getApplicationContext();
+                mUsbManager = (UsbManager) mApplicationContext.getSystemService(Context.USB_SERVICE);
+                mBioMiniHandle = new BioMiniAndroid(mUsbManager);
+            }
+        }
+        // Search for BioMini device and reqest permission
+        ufa_res = mBioMiniHandle.UFA_FindDevice();
+        String errmsg = mBioMiniHandle.UFA_GetErrorString(ufa_res);
+        if (ufa_res != BioMiniAndroid.ECODE.OK) {
+            isDeviceAvailable = false;
+            mBioMiniHandle.UFA_Uninit();
+            CustomAlertDialog.showAlertDialog(this, "Error message from findBioMini: " + errmsg);
+        }
+
+
+//        mBioMiniHandle.UFA_SetDeviceCallback(new IBioMiniDeviceCallback() {
+//            @Override
+//            public void onDeviceAttached() {
+//                Toast.makeText(mApplicationContext, "Device Attached", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        return isDeviceAvailable;
+    }
+
+
+    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(AppContract.PARAMS.USB_DEVICE_ATTACHED)) {
+                initBioMini();
+            } else {
+                mBioMiniHandle.UFA_Uninit();
+                isUFAInitialized = false;
+                Toast.makeText(SubscriberApplication.this, "USB Device Detached", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+
+    private void enumerate(IPermissionListener listener) {
+//        l("enumerating");
+        if (mUsbManager == null) {
+            Log.d("Rabin is testing: ", "mUsbManager null!!");
+        }
+
+//        mNumDevices = 0;
+        if (mUsbManager != null) {
+            HashMap<String, UsbDevice> devlist = mUsbManager.getDeviceList();
+            for (UsbDevice d : devlist.values()) {
+                Log.d("Rabin is testing: ", "Found device: "
+                        + String.format("%04X:%04X", d.getVendorId(),
+                        d.getProductId()));
+
+                int pid = d.getProductId();
+                if (BioMiniAndroid.isSupported(d.getVendorId(), d.getProductId())) {
+//                    l("Device under: " + d.getDeviceName());
+                    if (!mUsbManager.hasPermission(d)) {
+                        Log.d("Rabin is testing: ", "onPermissionDenied");
+                        listener.onPermissionDenied(d);
+                    } else {
+//                        if(mNumDevices > MAX_DEVICES) {
+//                            l("Too many devices attached (max:4)");
+//                            break;
+//                        }
+//                        mDeviceList[mNumDevices] = d;
+//                        mListScannerAdapter.add("Device #" + mNumDevices);
+//                        mNumDevices ++;
+                    }
+                }
+            }
+        }
+
+    }
+
+    private interface IPermissionListener {
+        void onPermissionDenied(UsbDevice d);
+    }
+
+    protected static final String ACTION_USB_PERMISSION = "com.android.biomini.USB_PERMISSION";
+
+    private class PermissionReceiver extends BroadcastReceiver {
+        private final IPermissionListener mPermissionListener;
+
+        public PermissionReceiver(IPermissionListener permissionListener) {
+            mPermissionListener = permissionListener;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("Rabin is testing: ", "onReceive");
+            if (getApplicationContext() != null) {
+                getApplicationContext().unregisterReceiver(this);
+                if (intent.getAction().equals(ACTION_USB_PERMISSION)) {
+                    if (!intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        mPermissionListener.onPermissionDenied((UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE));
+                    } else {
+                        Log.d("Rabin is testing: ", "Permission granted");
+                        UsbDevice dev = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+                        if (dev != null) {
+                            if (BioMiniAndroid.isSupported(dev.getVendorId(), dev.getProductId())) {
+                                Log.d("Rabin is testing: ", "startHandler_onReceive");
+                                mBioMiniHandle.UFA_SetDevice(dev);
+//                                TextView tv = (TextView) findViewById(R.id.txmessage);
+                                //tv.setText("Set device: " + dev); // device info.
+                            }
+                        } else {
+                            Log.d("Rabin is testing: ", "device not present!");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private PermissionReceiver mPermissionReceiver = new PermissionReceiver(
+            new IPermissionListener() {
+                @Override
+                public void onPermissionDenied(UsbDevice d) {
+                    Log.d("Rabin is testing: ", "Permission denied on " + d.getDeviceId());
+                }
+            });
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+
+        mBioMiniHandle.UFA_AbortCapturing();
+        mBioMiniHandle.UFA_Uninit();
+    }
+
     private void resetForm() {
         sp_salutation.setSelection(0);
         Payload.reset();
@@ -350,10 +517,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {
             View view = group.getChildAt(i);
             if (view instanceof EditText) {
-                ((EditText)view).getText().clear();
+                ((EditText) view).getText().clear();
             }
-            if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
-                clearEditText((ViewGroup)view);
+            if (view instanceof ViewGroup && (((ViewGroup) view).getChildCount() > 0))
+                clearEditText((ViewGroup) view);
 
         }
     }
@@ -395,8 +562,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
         System.out.println("Rabin is testing: Salutation " + getSalutation());
         System.out.println("Rabin is testing: Applicant Name " + et_applicants_name.getText().toString());
-        if(Payload.applicantPhoto.length()>0)
-        System.out.println("Rabin is testing: Applicant Photo"+ Payload.applicantPhoto);
+        if (Payload.applicantPhoto.length() > 0)
+            System.out.println("Rabin is testing: Applicant Photo" + Payload.applicantPhoto);
         System.out.println("Rabin is testing: Gender " + spn_gender.getSelectedItem().toString());
         System.out.println("Rabin is testing: House No " + et_house_no.getText().toString());
         System.out.println("Rabin is testing: Ward No " + et_ward_no.getText().toString());
@@ -405,12 +572,12 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: District " + spn_district.getSelectedItem().toString());
         System.out.println("Rabin is testing: Mobile " + et_contact_mobile_no.getText().toString());
         System.out.println("Rabin is testing: Email " + et_email.getText().toString());
-        if(Payload.applicantSign.length()>0)
-        System.out.println("Rabin is testing: Signature " + Payload.applicantSign);
-        if(Payload.boxPhoto.length()>0)
-        System.out.println("Rabin is testing: Box Photo " + Payload.boxPhoto);
-        if(Payload.cardPhoto.length()>0)
-        System.out.println("Rabin is testing: Card Photo " + Payload.cardPhoto);
+        if (Payload.applicantSign.length() > 0)
+            System.out.println("Rabin is testing: Signature " + Payload.applicantSign);
+        if (Payload.boxPhoto.length() > 0)
+            System.out.println("Rabin is testing: Box Photo " + Payload.boxPhoto);
+        if (Payload.cardPhoto.length() > 0)
+            System.out.println("Rabin is testing: Card Photo " + Payload.cardPhoto);
         System.out.println("Rabin is testing: Nationality " + sp_nationality.getSelectedItem().toString());
         System.out.println("Rabin is testing: User Id " + mPref.getStringValues(AppContract.Preferences.USER_ID));
         System.out.println("Rabin is testing: Job type " + getOccupation());
@@ -420,8 +587,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: Clear TV " + et_clear_tv.getText().toString());
         System.out.println("Rabin is testing: Cable " + et_cable_internet.getText().toString());
         System.out.println("Rabin is testing: FTTH " + et_ftth.getText().toString());
-        if(Payload.fingerPrint.length()>0)
-        System.out.println("Rabin is testing: Fingerprint " + Payload.fingerPrint);
+        if (Payload.fingerPrint.length() > 0)
+            System.out.println("Rabin is testing: Fingerprint " + Payload.fingerPrint);
     }
 
     private String getOccupation() {
@@ -446,6 +613,14 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         return sp_identification.getSelectedItemPosition() == 0 ? false : true;
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mUsbReceiver != null) {
+            unregisterReceiver(mUsbReceiver);
+        }
+    }
 
     private boolean isValid() {
 
@@ -656,9 +831,121 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             case R.id.iv_box_card:
                 iv_selected = iv_box_card;
                 accessCamera();
+            case R.id.iv_finger_print:
+                iv_finger_print.setEnabled(false);
+                iv_finger_print.setClickable(false);
+                iv_finger_print.setFocusable(true);
+                iv_finger_print.requestFocus();
+                if (initBioMini())
+                    captureFingerPrint();
                 break;
         }
     }
+
+    /**
+     * Initalize SDK for BioMini
+     */
+    private boolean initBioMini() {
+        if (findBioMini()) {
+            if (!isUFAInitialized) {
+                ufa_res = mBioMiniHandle.UFA_Init();
+                if (ufa_res == BioMiniAndroid.ECODE.OK) {
+                    isUFAInitialized = true;
+                    BioMiniHelper.setParams(mBioMiniHandle, ufa_res);
+                } else
+                    CustomAlertDialog.showAlertDialog(this, "Error from initBioMini: " + mBioMiniHandle.UFA_GetErrorString(ufa_res));
+
+            }
+        }
+        return isUFAInitialized;
+    }
+
+    private void captureFingerPrint() {
+
+        pdFP = new ProgressDialog(SubscriberApplication.this);
+        pdFP.setMessage("Finger print scanner is being activated. Please put your finger for scanning.");
+        pdFP.show();
+//        iv_finger_print.setEnabled(false);
+        if (mBioMiniHandle == null) {
+            System.out.println("BioMini SDK Handler with NULL!");
+        } else {
+            System.out.println("BioMini SDK Handler working fine!");
+
+            int[] nVal = new int[1];
+            mBioMiniHandle.UFA_GetParameter(BioMiniAndroid.PARAM.ENABLE_AUTOSLEEP, nVal);
+
+//            if (!mBioMiniHandle.UFA_IsAwake() && nVal[0] == 0) {
+//                CustomAlertDialog.showAlertDialog(this, "Fingerprint device is at sleep mode");
+////                iv_finger_print.setEnabled(true);
+//                return;
+//            }
+
+            byte[] pImage = new byte[320 * 480];
+            mBioMiniHandle.UFA_CaptureSingle(pImage);
+            String errmsg = mBioMiniHandle.UFA_GetErrorString(ufa_res);
+
+            if (ufa_res != BioMiniAndroid.ECODE.OK) {
+                pdFP.hide();
+                CustomAlertDialog.showAlertDialog(this, "Error msg from CaptureFingerPrint: " + errmsg);
+            }
+
+            int width = mBioMiniHandle.getImageWidth();
+            int height = mBioMiniHandle.getImageHeight();
+
+            mBioMiniCallbackHandler.onCaptureCallback(pImage, width, height, 500, true);
+
+            int[] quality = new int[1];
+            ufa_res = mBioMiniHandle.UFA_GetFPQuality(pImage, width, height, quality, 1);
+            if (ufa_res == BioMiniAndroid.ECODE.OK) {
+//                tv.append("\n" + "Fingerprint quality: " + quality[0]);
+                Log.d("Rabin is testing", "Fingerprint quality: " + quality[0]);
+            } else {
+                Log.d("Rabin is testing", "UFA_GetFPQuality failed (" + ufa_res + ")");
+            }
+
+        }
+    }
+
+
+    // Callback
+    private final IBioMiniCallback mBioMiniCallbackHandler = new IBioMiniCallback() {
+        private int mWidth = 0;
+        private int mHeight = 0;
+
+        @Override
+        public void onCaptureCallback(final byte[] capturedimage, int width, int height, int resolution, boolean bfingeron) {
+            mWidth = width;
+            mHeight = height;
+            if (capturedimage != null) {
+                Log.d("Rabin is testing", String.valueOf("onCaptureCallback called!" + " width:" + width + " height:" + height + " fingerOn:" + bfingeron));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int width = mWidth;
+                        int height = mHeight;
+                        byte[] Bits = new byte[width * height * 4];
+                        for (int i = 0; i < width * height; i++) {
+                            Bits[i * 4] =
+                                    Bits[i * 4 + 1] =
+                                            Bits[i * 4 + 2] = capturedimage[i];
+                            Bits[i * 4 + 3] = -1;
+                        }
+                        Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                        bm.copyPixelsFromBuffer(ByteBuffer.wrap(Bits));
+                        iv_finger_print.setImageBitmap(bm);
+                        iv_finger_print.invalidate();
+                    }
+                });
+            }
+            pdFP.hide();
+        }
+
+        @Override
+        public void onErrorOccurred(String msg) {
+            pdFP.hide();
+        }
+    };
+
 
     Bitmap current_bmp;
 
@@ -681,7 +968,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 default:
                     break;
             }
-        }else {
+        } else {
             rl_sign.setFocusable(true);
             rl_sign.requestFocus();
         }
