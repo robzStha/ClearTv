@@ -741,10 +741,25 @@
                 <!--android:text="@string/next" />-->
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/iv_finger_print"
+            <RelativeLayout
+                android:id="@+id/rl_finger_print"
                 android:layout_width="match_parent"
-                android:layout_height="150dp" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:focusableInTouchMode="true"
+                    android:focusable="true"
+                    android:id="@+id/iv_finger_print"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" />
+
+                <ImageView
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_fingerprint_black_24dp"/>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

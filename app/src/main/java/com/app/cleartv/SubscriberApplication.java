@@ -134,6 +134,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     RelativeLayout rl_nationality;
     @BindView(R.id.rl_sign)
     RelativeLayout rl_sign;
+    @BindView(R.id.rl_finger_print)
+    RelativeLayout rl_finger_print;
     @BindView(R.id.iv_sign)
     ImageView iv_sign;
     @BindView(R.id.btn_login_submit)
@@ -236,7 +238,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         iv_nationality_del.setOnClickListener(this);
         iv_salutation_del.setOnClickListener(this);
         rl_sign.setOnClickListener(this);
-        iv_finger_print.setOnClickListener(this);
+        rl_finger_print.setOnClickListener(this);
 
         iv_applicant.setOnClickListener(this);
         iv_box_card.setOnClickListener(this);
@@ -495,6 +497,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
         mBioMiniHandle.UFA_AbortCapturing();
         mBioMiniHandle.UFA_Uninit();
+        isUFAInitialized = false;
     }
 
     private void resetForm() {
@@ -670,6 +673,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT);
             isValid = false;
+        } else if (iv_finger_print.getDrawable() == null) {
+            pb_loading.setVisibility(View.INVISIBLE);
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.FINGERPRINT);
+            isValid = false;
         } else {
             if (spn_box_cable_photo.getSelectedItemId() == 0) {
                 Payload.boxPhoto = encoded;
@@ -831,11 +838,16 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             case R.id.iv_box_card:
                 iv_selected = iv_box_card;
                 accessCamera();
-            case R.id.iv_finger_print:
-                iv_finger_print.setEnabled(false);
-                iv_finger_print.setClickable(false);
-                iv_finger_print.setFocusable(true);
-                iv_finger_print.requestFocus();
+                break;
+            case R.id.rl_finger_print:
+                pdFP = new ProgressDialog(SubscriberApplication.this);
+                pdFP.setMessage("Finger print scanner is being activated. Please put your finger for scanning.");
+                pdFP.show();
+                System.out.print("Rabin is testing: Progress dialog shown");
+                rl_finger_print.setEnabled(false);
+                rl_finger_print.setClickable(false);
+                rl_finger_print.setFocusable(true);
+                rl_finger_print.requestFocus();
                 if (initBioMini())
                     captureFingerPrint();
                 break;
@@ -862,9 +874,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     private void captureFingerPrint() {
 
-        pdFP = new ProgressDialog(SubscriberApplication.this);
-        pdFP.setMessage("Finger print scanner is being activated. Please put your finger for scanning.");
-        pdFP.show();
+//        pdFP.show();
 //        iv_finger_print.setEnabled(false);
         if (mBioMiniHandle == null) {
             System.out.println("BioMini SDK Handler with NULL!");
@@ -918,7 +928,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             mHeight = height;
             if (capturedimage != null) {
                 Log.d("Rabin is testing", String.valueOf("onCaptureCallback called!" + " width:" + width + " height:" + height + " fingerOn:" + bfingeron));
-                runOnUiThread(new Runnable() {
+
+                new Handler().post(new Runnable() {
                     @Override
                     public void run() {
                         int width = mWidth;
@@ -932,12 +943,41 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                         }
                         Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         bm.copyPixelsFromBuffer(ByteBuffer.wrap(Bits));
+                        Payload.fingerPrint = FileUtils.convertBitmapToBase64(bm);
                         iv_finger_print.setImageBitmap(bm);
+                        rl_finger_print.setFocusable(true);
+                        rl_finger_print.setEnabled(true);
+                        rl_finger_print.requestFocus();
                         iv_finger_print.invalidate();
                     }
                 });
+
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        int width = mWidth;
+//                        int height = mHeight;
+//                        byte[] Bits = new byte[width * height * 4];
+//                        for (int i = 0; i < width * height; i++) {
+//                            Bits[i * 4] =
+//                                    Bits[i * 4 + 1] =
+//                                            Bits[i * 4 + 2] = capturedimage[i];
+//                            Bits[i * 4 + 3] = -1;
+//                        }
+//                        Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+//                        bm.copyPixelsFromBuffer(ByteBuffer.wrap(Bits));
+//                        Payload.fingerPrint = FileUtils.convertBitmapToBase64(bm);
+//                        iv_finger_print.setImageBitmap(bm);
+//                        iv_finger_print.setFocusable(true);
+//                        iv_finger_print.setEnabled(true);
+//                        iv_finger_print.requestFocus();
+//                        iv_finger_print.invalidate();
+//                    }
+//                });
             }
             pdFP.hide();
+            rl_finger_print.setEnabled(true);
+            rl_finger_print.setClickable(true);
         }
 
         @Override
@@ -945,6 +985,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             pdFP.hide();
         }
     };
+
+
+
+
 
 
     Bitmap current_bmp;

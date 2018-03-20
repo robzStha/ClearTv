@@ -27,6 +27,7 @@ public class AppContract {
         public static final String BOX = "Please take a photo for box number";
         public static final String CARD = "Please take a photo for card number";
         public static final String APPLICANT = "Please take a photo for applicant";
+        public static final String FINGERPRINT = "Fingerprint of applicant is needed.";
     }
 
     public class Permission {
