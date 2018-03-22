@@ -1,7 +1,6 @@
 package com.app.cleartv;
 
 import android.Manifest;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -64,7 +63,6 @@ import com.app.cleartv.utils.Payload;
 import com.app.cleartv.utils.ViewUtils;
 import com.suprema.BioMiniAndroid;
 import com.suprema.IBioMiniCallback;
-import com.suprema.IBioMiniDeviceCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,8 +132,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     RelativeLayout rl_nationality;
     @BindView(R.id.rl_sign)
     RelativeLayout rl_sign;
-    @BindView(R.id.rl_finger_print)
-    RelativeLayout rl_finger_print;
+    @BindView(R.id.rl_finger_print_right)
+    RelativeLayout rl_finger_print_right;
+    @BindView(R.id.rl_finger_print_left)
+    RelativeLayout rl_finger_print_left;
     @BindView(R.id.iv_sign)
     ImageView iv_sign;
     @BindView(R.id.btn_login_submit)
@@ -152,11 +152,16 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @BindView(R.id.iv_applicant)
     ImageView iv_applicant;
 
-    @BindView(R.id.iv_box_card)
-    ImageView iv_box_card;
+    @BindView(R.id.iv_box)
+    ImageView iv_box;
+    @BindView(R.id.iv_card)
+    ImageView iv_card;
 
-    @BindView(R.id.iv_finger_print)
-    ImageView iv_finger_print;
+    @BindView(R.id.iv_finger_print_right)
+    ImageView iv_finger_print_right;
+
+    @BindView(R.id.iv_finger_print_left)
+    ImageView iv_finger_print_left;
 
     @BindView(R.id.spn_box_cable_photo)
     Spinner spn_box_cable_photo;
@@ -173,7 +178,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     private Context mApplicationContext;
     private UsbManager mUsbManager;
     private boolean mUseUsbManager;
-    private ProgressDialog pdFP;
+    boolean isRightFingerprint = true;
+//    private ProgressDialog pdFP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,10 +244,12 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         iv_nationality_del.setOnClickListener(this);
         iv_salutation_del.setOnClickListener(this);
         rl_sign.setOnClickListener(this);
-        rl_finger_print.setOnClickListener(this);
+        rl_finger_print_right.setOnClickListener(this);
+        rl_finger_print_left.setOnClickListener(this);
 
         iv_applicant.setOnClickListener(this);
-        iv_box_card.setOnClickListener(this);
+        iv_box.setOnClickListener(this);
+        iv_card.setOnClickListener(this);
 
         ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.districts));
         DistrictAdapter districtArrayAdapter = new DistrictAdapter(districts);
@@ -511,7 +519,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         sp_subscription_type.setSelection(0);
         spn_district.setSelection(0);
         iv_applicant.setImageDrawable(null);
-        iv_box_card.setImageDrawable(null);
+        iv_box.setImageDrawable(null);
+        iv_card.setImageDrawable(null);
+        iv_finger_print_left.setImageDrawable(null);
+        iv_finger_print_right.setImageDrawable(null);
         iv_sign.setImageDrawable(null);
         et_applicants_name.requestFocus();
     }
@@ -657,35 +668,43 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, "Please provide applicant's signatures");
             isValid = false;
-        } else if (iv_applicant.getDrawable() == null && iv_box_card.getDrawable() == null) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_BOX_CARD);
-            isValid = false;
-        } else if (spn_box_cable_photo.getSelectedItemId() == 0 && iv_box_card.getDrawable() == null) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX);
-            isValid = false;
-        } else if (spn_box_cable_photo.getSelectedItemId() == 1 && iv_box_card.getDrawable() == null) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CARD);
-            isValid = false;
-        } else if (iv_applicant.getDrawable() == null) {
+        }
+//        else if (iv_applicant.getDrawable() == null && iv_box.getDrawable() == null) {
+//            pb_loading.setVisibility(View.INVISIBLE);
+//            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX_CARD);
+//            isValid = false;
+//        }
+//        else if (spn_box_cable_photo.getSelectedItemId() == 0 && iv_box.getDrawable() == null) {
+//            pb_loading.setVisibility(View.INVISIBLE);
+//            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX);
+//            isValid = false;
+//        } else if (spn_box_cable_photo.getSelectedItemId() == 1 && iv_box.getDrawable() == null) {
+//            pb_loading.setVisibility(View.INVISIBLE);
+//            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CARD);
+//            isValid = false;
+//        }
+        else if (iv_applicant.getDrawable() == null) {
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT);
             isValid = false;
-        } else if (iv_finger_print.getDrawable() == null) {
+        } else if (iv_box.getDrawable() == null && iv_card.getDrawable() == null) {
+            pb_loading.setVisibility(View.INVISIBLE);
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX_CARD);
+            isValid = false;
+        } else if (iv_finger_print_right.getDrawable() == null || iv_finger_print_left.getDrawable() == null) {
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.FINGERPRINT);
             isValid = false;
-        } else {
-            if (spn_box_cable_photo.getSelectedItemId() == 0) {
-                Payload.boxPhoto = encoded;
-                Payload.cardPhoto = "";
-            } else {
-                Payload.cardPhoto = encoded;
-                Payload.boxPhoto = "";
-            }
         }
+//        else {
+//            if (spn_box_cable_photo.getSelectedItemId() == 0) {
+//                Payload.boxPhoto = encoded;
+//                Payload.cardPhoto = "";
+//            } else {
+//                Payload.cardPhoto = encoded;
+//                Payload.boxPhoto = "";
+//            }
+//        }
         return isValid;
     }
 
@@ -835,19 +854,37 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 iv_selected = iv_applicant;
                 accessCamera();
                 break;
-            case R.id.iv_box_card:
-                iv_selected = iv_box_card;
+            case R.id.iv_box:
+                iv_selected = iv_box;
                 accessCamera();
                 break;
-            case R.id.rl_finger_print:
-                pdFP = new ProgressDialog(SubscriberApplication.this);
-                pdFP.setMessage("Finger print scanner is being activated. Please put your finger for scanning.");
-                pdFP.show();
+            case R.id.iv_card:
+                iv_selected = iv_card;
+                accessCamera();
+                break;
+            case R.id.rl_finger_print_right:
+//                pdFP = new ProgressDialog(SubscriberApplication.this);
+//                pdFP.setMessage("Finger print scanner is being activated. Please put your finger for scanning.");
+//                pdFP.show();
+                isRightFingerprint = true;
                 System.out.print("Rabin is testing: Progress dialog shown");
-                rl_finger_print.setEnabled(false);
-                rl_finger_print.setClickable(false);
-                rl_finger_print.setFocusable(true);
-                rl_finger_print.requestFocus();
+                rl_finger_print_right.setEnabled(false);
+                rl_finger_print_right.setClickable(false);
+                rl_finger_print_right.setFocusable(true);
+                rl_finger_print_right.requestFocus();
+                if (initBioMini())
+                    captureFingerPrint();
+                break;
+            case R.id.rl_finger_print_left:
+                isRightFingerprint = false;
+//                pdFP = new ProgressDialog(SubscriberApplication.this);
+//                pdFP.setMessage("Finger print scanner is being activated. Please put your finger for scanning.");
+//                pdFP.show();
+                System.out.print("Rabin is testing: Progress dialog shown");
+                rl_finger_print_left.setEnabled(false);
+                rl_finger_print_left.setClickable(false);
+                rl_finger_print_left.setFocusable(true);
+                rl_finger_print_left.requestFocus();
                 if (initBioMini())
                     captureFingerPrint();
                 break;
@@ -875,7 +912,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     private void captureFingerPrint() {
 
 //        pdFP.show();
-//        iv_finger_print.setEnabled(false);
+//        iv_finger_print_right.setEnabled(false);
         if (mBioMiniHandle == null) {
             System.out.println("BioMini SDK Handler with NULL!");
         } else {
@@ -886,7 +923,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
 //            if (!mBioMiniHandle.UFA_IsAwake() && nVal[0] == 0) {
 //                CustomAlertDialog.showAlertDialog(this, "Fingerprint device is at sleep mode");
-////                iv_finger_print.setEnabled(true);
+////                iv_finger_print_right.setEnabled(true);
 //                return;
 //            }
 
@@ -895,7 +932,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             String errmsg = mBioMiniHandle.UFA_GetErrorString(ufa_res);
 
             if (ufa_res != BioMiniAndroid.ECODE.OK) {
-                pdFP.hide();
+//                pdFP.hide();
                 CustomAlertDialog.showAlertDialog(this, "Error msg from CaptureFingerPrint: " + errmsg);
             }
 
@@ -944,11 +981,19 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                         Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         bm.copyPixelsFromBuffer(ByteBuffer.wrap(Bits));
                         Payload.fingerPrint = FileUtils.convertBitmapToBase64(bm);
-                        iv_finger_print.setImageBitmap(bm);
-                        rl_finger_print.setFocusable(true);
-                        rl_finger_print.setEnabled(true);
-                        rl_finger_print.requestFocus();
-                        iv_finger_print.invalidate();
+                        if (isRightFingerprint) {
+                            iv_finger_print_right.setImageBitmap(bm);
+                            rl_finger_print_right.setFocusable(true);
+                            rl_finger_print_right.setEnabled(true);
+                            rl_finger_print_right.requestFocus();
+                            iv_finger_print_right.invalidate();
+                        } else {
+                            iv_finger_print_left.setImageBitmap(bm);
+                            rl_finger_print_left.setFocusable(true);
+                            rl_finger_print_left.setEnabled(true);
+                            rl_finger_print_left.requestFocus();
+                            iv_finger_print_left.invalidate();
+                        }
                     }
                 });
 
@@ -967,28 +1012,29 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //                        Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 //                        bm.copyPixelsFromBuffer(ByteBuffer.wrap(Bits));
 //                        Payload.fingerPrint = FileUtils.convertBitmapToBase64(bm);
-//                        iv_finger_print.setImageBitmap(bm);
-//                        iv_finger_print.setFocusable(true);
-//                        iv_finger_print.setEnabled(true);
-//                        iv_finger_print.requestFocus();
-//                        iv_finger_print.invalidate();
+//                        iv_finger_print_right.setImageBitmap(bm);
+//                        iv_finger_print_right.setFocusable(true);
+//                        iv_finger_print_right.setEnabled(true);
+//                        iv_finger_print_right.requestFocus();
+//                        iv_finger_print_right.invalidate();
 //                    }
 //                });
             }
-            pdFP.hide();
-            rl_finger_print.setEnabled(true);
-            rl_finger_print.setClickable(true);
+//            pdFP.hide();
+            if (isRightFingerprint) {
+                rl_finger_print_right.setEnabled(true);
+                rl_finger_print_right.setClickable(true);
+            } else {
+                rl_finger_print_left.setEnabled(true);
+                rl_finger_print_left.setClickable(true);
+            }
         }
 
         @Override
         public void onErrorOccurred(String msg) {
-            pdFP.hide();
+//            pdFP.hide();
         }
     };
-
-
-
-
 
 
     Bitmap current_bmp;
@@ -1214,10 +1260,15 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     private void setImageToPayload(Bitmap myBitmap) {
         encoded = FileUtils.convertBitmapToBase64(myBitmap);
-        if (iv_selected == iv_box_card) {
+        if (iv_selected == iv_box) {
 //            Payload.boxCardPhoto = encoded;
-            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
-            else Payload.cardPhoto = encoded;
+            Payload.boxPhoto = encoded;
+//            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
+//            else Payload.cardPhoto = encoded;
+        } else if (iv_selected == iv_card) {
+            Payload.cardPhoto = encoded;
+//            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
+//            else Payload.cardPhoto = encoded;
         } else Payload.applicantPhoto = encoded;
     }
 

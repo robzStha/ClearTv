@@ -15,4 +15,6 @@
     <dimen name="spc_50">50dp</dimen>
     <dimen name="txt_14">14sp</dimen>
     <dimen name="spc_14">14dp</dimen>
+    <dimen name="txt_12">12sp</dimen>
+    <dimen name="spc_2">2dp</dimen>
 </resources>

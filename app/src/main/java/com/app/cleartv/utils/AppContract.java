@@ -23,7 +23,7 @@ public class AppContract {
 
     public class Errors {
         public static final String IMAGE_ERROR = "Image not found";
-        public static final String APPLICANT_BOX_CARD = "Please take photos for applicant information";
+        public static final String BOX_CARD = "Either box or cable photo of applicant is needed.";
         public static final String BOX = "Please take a photo for box number";
         public static final String CARD = "Please take a photo for card number";
         public static final String APPLICANT = "Please take a photo for applicant";
