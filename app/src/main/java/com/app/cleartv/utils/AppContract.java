@@ -24,10 +24,11 @@ public class AppContract {
     public class Errors {
         public static final String IMAGE_ERROR = "Image not found";
         public static final String APPLICANT_BOX_CARD = "Please take photos for applicant information";
+        public static final String BOX_CARD = "Photo for either box or card is needed";
         public static final String BOX = "Please take a photo for box number";
         public static final String CARD = "Please take a photo for card number";
         public static final String APPLICANT = "Please take a photo for applicant";
-        public static final String FINGERPRINT = "Fingerprint of applicant is needed.";
+        public static final String FINGERPRINT = "Both left & right fingerprint of applicant is needed.";
     }
 
     public class Permission {

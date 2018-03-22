@@ -16,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,7 +29,6 @@ import com.app.cleartv.utils.FileUtils;
 import com.app.cleartv.utils.Payload;
 import com.app.cleartv.utils.ViewUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -42,7 +40,7 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
     @BindView(R.id.iv_applicant)
     ImageView iv_applicant;
 
-    @BindView(R.id.iv_box_card)
+    @BindView(R.id.iv_box)
     ImageView iv_box_card;
 
     @BindView(R.id.btn_next)
@@ -72,7 +70,7 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
                 iv_selected = iv_applicant;
                 accessCamera();
                 break;
-            case R.id.iv_box_card:
+            case R.id.iv_box:
                 iv_selected = iv_box_card;
                 accessCamera();
                 break;

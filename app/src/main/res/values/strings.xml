@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ClearTV</string>
+    <string name="app_name">Sajilo Activation</string>
     <string name="subsc_app_form">Subscriber Application Form</string>
     <string name="title">Title: </string>
     <string name="applicants_name">Applicant\'s Name</string>
@@ -163,5 +163,9 @@
     <string name="grant_type">password</string>
     <string name="submit">Submit</string>
     <string name="logout">Log Out</string>
+    <string name="right">Right</string>
+    <string name="left">Left</string>
+    <string name="card_number">Card #</string>
+    <string name="box_number">Box #</string>
 
 </resources>

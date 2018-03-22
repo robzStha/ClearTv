@@ -86,7 +86,7 @@
                     android:background="@drawable/bg_shadow">
 
                     <ImageView
-                        android:id="@+id/iv_box_card"
+                        android:id="@+id/iv_box"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:cropToPadding="true"
