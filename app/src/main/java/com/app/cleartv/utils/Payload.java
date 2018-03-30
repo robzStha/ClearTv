@@ -6,6 +6,7 @@ package com.app.cleartv.utils;
 
 public class Payload {
 
+    // to ignore validation the value sent to server must have some text so currently a temporary variable is set.
     private static final String tempValue = "Empty";
 
     public static String applicantPhoto = "";
@@ -16,6 +17,7 @@ public class Payload {
     public static String fingerPrintRight = tempValue;
     public static String fingerPrintLeft = tempValue;
     public static String tncPhoto = tempValue;
+    public static String identityPhoto = tempValue;
 
     public static void reset() {
         applicantPhoto = "";
@@ -26,5 +28,6 @@ public class Payload {
         fingerPrintRight = tempValue;
         fingerPrintLeft = tempValue;
         tncPhoto = tempValue;
+        identityPhoto = tempValue;
     }
 }

@@ -186,5 +186,7 @@
     <string name="setting">Settings</string>
     <string name="skip_validation">Skip Validation</string>
     <string name="alt_contact_mobile_no">Optional Contact/Mobile no</string>
+    <string name="identity">Identity Photo</string>
+    <string name="tncPhoto"><![CDATA[T&C Photo]]></string>
 
 </resources>

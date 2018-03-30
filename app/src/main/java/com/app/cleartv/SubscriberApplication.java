@@ -157,6 +157,18 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @BindView(R.id.iv_applicant)
     ImageView iv_applicant;
 
+    @BindView(R.id.rl_identity)
+    RelativeLayout rl_identity;
+
+    @BindView(R.id.rl_tnc)
+    RelativeLayout rl_tnc;
+
+    @BindView(R.id.iv_identity)
+    ImageView iv_identity;
+
+    @BindView(R.id.iv_tnc)
+    ImageView iv_tnc;
+
 
 //    @BindView(R.id.iv_box)
 //    ImageView iv_box;
@@ -218,7 +230,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
 
-
         registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
         registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_DETACHED));
 
@@ -243,22 +254,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             }
         }
 
-//        sp_salutation.on
-
-//        sp_salutation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                if (i == 2) {
-//                    sp_salutation.setVisibility(View.GONE);
-//                    et_salutation.setVisibility(View.VISIBLE);
-//                    et_salutation.requestFocus();
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//            }
-//        });
         sp_salutation.setOnItemSelectedListener(this);
         sp_nationality.setOnItemSelectedListener(this);
         sp_identification.setOnItemSelectedListener(this);
@@ -272,6 +267,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         rl_finger_print_left.setOnClickListener(this);
         btn_qrCode_box.setOnClickListener(this);
         btn_qrCode_card.setOnClickListener(this);
+        rl_identity.setOnClickListener(this);
+        rl_tnc.setOnClickListener(this);
 
         iv_applicant.setOnClickListener(this);
 //        iv_box.setOnClickListener(this);
@@ -321,6 +318,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                                 et_ftth.getText().toString(),
                                 Payload.fingerPrintRight,
                                 Payload.fingerPrintLeft,
+                                Payload.identityPhoto,
                                 Payload.tncPhoto
                         );
 
@@ -417,7 +415,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             mBioMiniHandle.UFA_Uninit();
             CustomAlertDialog.showAlertDialog(this, "Error message from findBioMini: " + errmsg);
         }
-
 
 //        mBioMiniHandle.UFA_SetDeviceCallback(new IBioMiniDeviceCallback() {
 //            @Override
@@ -601,7 +598,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                     Toast.makeText(SubscriberApplication.this, "Validation Skipped", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(SubscriberApplication.this, "Validation Enabled", Toast.LENGTH_SHORT).show();
-                return  true;
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -909,6 +906,14 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //                iv_selected = iv_card;
 //                accessCamera();
 //                break;
+            case R.id.rl_identity:
+                iv_selected = iv_identity;
+                accessCamera();
+                break;
+            case R.id.rl_tnc:
+                iv_selected = iv_tnc;
+                accessCamera();
+                break;
             case R.id.btn_qrCode_box:
                 new MVBarcodeScanner.Builder()
                         .setScanningMode(MVBarcodeScanner.ScanningMode.SINGLE_AUTO)
@@ -924,9 +929,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                         .launchScanner(this, AppContract.RequestCode.CARD_CODE);
                 break;
             case R.id.rl_finger_print_right:
-//                pdFP = new ProgressDialog(SubscriberApplication.this);
-//                pdFP.setMessage("Finger print scanner is being activated. Please put your finger for scanning.");
-//                pdFP.show();
                 isRightFingerprint = true;
                 System.out.print("Rabin is testing: Progress dialog shown");
                 rl_finger_print_right.setEnabled(false);
@@ -938,9 +940,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 break;
             case R.id.rl_finger_print_left:
                 isRightFingerprint = false;
-//                pdFP = new ProgressDialog(SubscriberApplication.this);
-//                pdFP.setMessage("Finger print scanner is being activated. Please put your finger for scanning.");
-//                pdFP.show();
                 System.out.print("Rabin is testing: Progress dialog shown");
                 rl_finger_print_left.setEnabled(false);
                 rl_finger_print_left.setClickable(false);
@@ -1021,10 +1020,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         private int mHeight = 0;
 
         @Override
-        public void onCaptureCallback(final byte[] capturedimage, int width, int height, int resolution, boolean bfingeron) {
+        public void onCaptureCallback(final byte[] capturedImage, int width, int height, int resolution, boolean bfingeron) {
             mWidth = width;
             mHeight = height;
-            if (capturedimage != null) {
+            if (capturedImage != null) {
                 Log.d("Rabin is testing", String.valueOf("onCaptureCallback called!" + " width:" + width + " height:" + height + " fingerOn:" + bfingeron));
 
                 new Handler().post(new Runnable() {
@@ -1036,7 +1035,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                         for (int i = 0; i < width * height; i++) {
                             Bits[i * 4] =
                                     Bits[i * 4 + 1] =
-                                            Bits[i * 4 + 2] = capturedimage[i];
+                                            Bits[i * 4 + 2] = capturedImage[i];
                             Bits[i * 4 + 3] = -1;
                         }
                         Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -1207,37 +1206,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             ViewUtils.showToastMessage(this, "No camera app available");
         }
     }
-//    private void accessCamera() {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//            // comment here
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-//        } else CommonMethods.openCamera(CapturePhotos.this, imgName);
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        if (requestCode == 0) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-//                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-//                CommonMethods.openCamera(CapturePhotos.this, imgName);
-//            }
-//        }
-//    }
-
-//    private static File getOutputMediaFile() {
-//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES), "CameraDemo");
-//
-//        if (!mediaStorageDir.exists()) {
-//            if (!mediaStorageDir.mkdirs()) {
-//                return null;
-//            }
-//        }
-//
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        return new File(mediaStorageDir.getPath() + File.separator +
-//                "IMG_" + timeStamp + ".jpg");
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -1259,17 +1227,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             }
         }
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (resultCode == RESULT_OK) {
-//            switch (requestCode) {
-//                case AppContract.RequestCode.CAMERA:
-//                    sendBackImagePath();
-//                    break;
-//            }
-//        }
-//    }
 
     /**
      * Set callback
@@ -1341,17 +1298,12 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     private void setImageToPayload(Bitmap myBitmap) {
         encoded = FileUtils.convertBitmapToBase64(myBitmap);
-//        if (iv_selected == iv_box) {
-////            Payload.boxCardPhoto = encoded;
-//            Payload.boxPhoto = encoded;
-////            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
-////            else Payload.cardPhoto = encoded;
-//        } else if (iv_selected == iv_card) {
-//            Payload.cardPhoto = encoded;
-////            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
-////            else Payload.cardPhoto = encoded;
-//        } else
-        Payload.applicantPhoto = encoded;
+        if (iv_selected == iv_identity) {
+            Payload.identityPhoto = encoded;
+        } else if (iv_selected == iv_tnc) {
+            Payload.tncPhoto = encoded;
+        } else
+            Payload.applicantPhoto = encoded;
     }
 
 
@@ -1368,7 +1320,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         return rotateBitmap(myBitmap, orientation);
     }
 
-    //    }
     public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
 
         Matrix matrix = new Matrix();
