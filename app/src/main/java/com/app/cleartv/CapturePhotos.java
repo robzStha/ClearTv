@@ -76,7 +76,7 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btn_next:
                 if (iv_applicant.getDrawable() == null && iv_box_card.getDrawable() == null)
-                    CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_BOX_CARD);
+                    CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX_CARD);
                 else if (spn_box_cable_photo.getSelectedItemId() == 0 && iv_box_card.getDrawable() == null)
                     CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX);
                 else if (spn_box_cable_photo.getSelectedItemId() == 1 && iv_box_card.getDrawable() == null)
