@@ -113,6 +113,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     EditText et_email;
     @BindView(R.id.et_contact_mobile_no)
     EditText et_contact_mobile_no;
+    @BindView(R.id.et_alt_contact_mobile_no)
+    EditText et_alt_contact_mobile_no;
     @BindView(R.id.et_applicants_name)
     EditText et_applicants_name;
     @BindView(R.id.et_tole_street_name)
@@ -155,11 +157,12 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @BindView(R.id.iv_applicant)
     ImageView iv_applicant;
 
-    @BindView(R.id.iv_box)
-    ImageView iv_box;
 
-    @BindView(R.id.iv_card)
-    ImageView iv_card;
+//    @BindView(R.id.iv_box)
+//    ImageView iv_box;
+//
+//    @BindView(R.id.iv_card)
+//    ImageView iv_card;
 
     @BindView(R.id.iv_finger_print_right)
     ImageView iv_finger_print_right;
@@ -170,8 +173,17 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @BindView(R.id.spn_box_cable_photo)
     Spinner spn_box_cable_photo;
 
-    @BindView(R.id.btn_qrcode)
-    Button btn_qrcode;
+    @BindView(R.id.btn_qrCode_box)
+    Button btn_qrCode_box;
+
+    @BindView(R.id.btn_qrCode_card)
+    Button btn_qrCode_card;
+
+    @BindView(R.id.et_box_code)
+    EditText et_box_code;
+
+    @BindView(R.id.et_card_code)
+    EditText et_card_code;
 
     ProgressDialog pd;
 
@@ -188,6 +200,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     private Context mApplicationContext;
     private UsbManager mUsbManager;
     private boolean mUseUsbManager;
+    private boolean skipValidation = false;
 
     boolean isRightFingerprint = true;
 //    private ProgressDialog pdFP;
@@ -257,11 +270,12 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         rl_sign.setOnClickListener(this);
         rl_finger_print_right.setOnClickListener(this);
         rl_finger_print_left.setOnClickListener(this);
-        btn_qrcode.setOnClickListener(this);
+        btn_qrCode_box.setOnClickListener(this);
+        btn_qrCode_card.setOnClickListener(this);
 
         iv_applicant.setOnClickListener(this);
-        iv_box.setOnClickListener(this);
-        iv_card.setOnClickListener(this);
+//        iv_box.setOnClickListener(this);
+//        iv_card.setOnClickListener(this);
 
         ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.districts));
         DistrictAdapter districtArrayAdapter = new DistrictAdapter(districts);
@@ -291,6 +305,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                                 et_vdc_municipality.getText().toString(),
                                 spn_district.getSelectedItem().toString(),
                                 et_contact_mobile_no.getText().toString(),
+                                et_alt_contact_mobile_no.getText().toString(),
                                 et_email.getText().toString(),
                                 Payload.applicantSign,
                                 Payload.boxPhoto,
@@ -304,7 +319,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                                 et_clear_tv.getText().toString(),
                                 et_cable_internet.getText().toString(),
                                 et_ftth.getText().toString(),
-                                Payload.fingerPrint
+                                Payload.fingerPrintRight,
+                                Payload.fingerPrintLeft,
+                                Payload.tncPhoto
                         );
 
                         customer.enqueue(new Callback<Customer>() {
@@ -531,13 +548,13 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         sp_subscription_type.setSelection(0);
         spn_district.setSelection(0);
         iv_applicant.setImageDrawable(null);
-        iv_box.setImageDrawable(null);
-        iv_card.setImageDrawable(null);
+//        iv_box.setImageDrawable(null);
+//        iv_card.setImageDrawable(null);
+        et_box_code.getText().clear();
+        et_card_code.getText().clear();
         iv_finger_print_left.setImageDrawable(null);
         iv_finger_print_right.setImageDrawable(null);
         iv_sign.setImageDrawable(null);
-        iv_finger_print_left.setImageDrawable(null);
-        iv_finger_print_right.setImageDrawable(null);
         et_applicants_name.requestFocus();
     }
 
@@ -577,8 +594,14 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                     public void onCancelClicked() {
                     }
                 });
-
                 return true;
+            case R.id.action_skip_validation:
+                skipValidation = skipValidation ? false : true;
+                if (skipValidation)
+                    Toast.makeText(SubscriberApplication.this, "Validation Skipped", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(SubscriberApplication.this, "Validation Enabled", Toast.LENGTH_SHORT).show();
+                return  true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -599,6 +622,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: Munc " + et_vdc_municipality.getText().toString());
         System.out.println("Rabin is testing: District " + spn_district.getSelectedItem().toString());
         System.out.println("Rabin is testing: Mobile " + et_contact_mobile_no.getText().toString());
+        System.out.println("Rabin is testing: Alt Mobile " + et_alt_contact_mobile_no.getText().toString());
         System.out.println("Rabin is testing: Email " + et_email.getText().toString());
         if (Payload.applicantSign.length() > 0)
             System.out.println("Rabin is testing: Signature " + Payload.applicantSign);
@@ -615,8 +639,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: Clear TV " + et_clear_tv.getText().toString());
         System.out.println("Rabin is testing: Cable " + et_cable_internet.getText().toString());
         System.out.println("Rabin is testing: FTTH " + et_ftth.getText().toString());
-        if (Payload.fingerPrint.length() > 0)
-            System.out.println("Rabin is testing: Fingerprint " + Payload.fingerPrint);
+        if (Payload.fingerPrintRight.length() > 0)
+            System.out.println("Rabin is testing: Fingerprint " + Payload.fingerPrintRight);
     }
 
     private String getOccupation() {
@@ -652,35 +676,38 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     private boolean isValid() {
 
+        if (skipValidation)
+            return true;
+
         boolean isValid = true;
 
         if (getSalutation().equals("")) {
             pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, "Please enter the title");
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.TITLE);
             isValid = false;
         } else if (et_applicants_name.getText().length() == 0) {
             pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, "Please enter the applicant's name");
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_NAME);
             isValid = false;
         } else if (getNationality().equals("")) {
             pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, "Please enter the applicant's nationality");
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.NATIONALITY);
             isValid = false;
         } else if (/*isPassport() && */getCitizenPassport().equals("")) {
             pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, "Please enter the identification detail of applicant");
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.IDENTIFICATION);
             isValid = false;
         } else if (et_tole_street_name.getText().toString().equals("")) {
             pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, "Please enter the tole / street name of applicant");
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.TOLE_STREET);
             isValid = false;
         } else if (!CommonMethods.isValidEmail(et_email.getText())) {
             pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, "Please enter a valid email");
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.EMAIL);
             isValid = false;
         } else if (current_bmp == null) {
             pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, "Please provide applicant's signatures");
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.SIGNATURE);
             isValid = false;
         }
 //        else if (iv_applicant.getDrawable() == null && iv_box.getDrawable() == null) {
@@ -697,15 +724,21 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CARD);
 //            isValid = false;
 //        }
-        else if (iv_applicant.getDrawable() == null) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT);
-            isValid = false;
-        } else if (iv_box.getDrawable() == null && iv_card.getDrawable() == null) {
+        else if (et_card_code.getText().toString().trim().isEmpty() && et_box_code.getText().toString().trim().isEmpty()) {
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX_CARD);
             isValid = false;
-        } else if (iv_finger_print_right.getDrawable() == null || iv_finger_print_left.getDrawable() == null) {
+        } else if (iv_applicant.getDrawable() == null) {
+            pb_loading.setVisibility(View.INVISIBLE);
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_PHOTO);
+            isValid = false;
+        }
+// else if (iv_box.getDrawable() == null && iv_card.getDrawable() == null) {
+//            pb_loading.setVisibility(View.INVISIBLE);
+//            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX_CARD);
+//            isValid = false;
+//        }
+        else if (iv_finger_print_right.getDrawable() == null || iv_finger_print_left.getDrawable() == null) {
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.FINGERPRINT);
             isValid = false;
@@ -868,20 +901,27 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 iv_selected = iv_applicant;
                 accessCamera();
                 break;
-            case R.id.iv_box:
-                iv_selected = iv_box;
-                accessCamera();
-                break;
-            case R.id.iv_card:
-                iv_selected = iv_card;
-                accessCamera();
-                break;
-            case R.id.btn_qrcode:
+//            case R.id.iv_box:
+//                iv_selected = iv_box;
+//                accessCamera();
+//                break;
+//            case R.id.iv_card:
+//                iv_selected = iv_card;
+//                accessCamera();
+//                break;
+            case R.id.btn_qrCode_box:
                 new MVBarcodeScanner.Builder()
                         .setScanningMode(MVBarcodeScanner.ScanningMode.SINGLE_AUTO)
                         .setFormats(Barcode.ALL_FORMATS)
                         .build()
-                        .launchScanner(this, AppContract.RequestCode.BAR_CODE);
+                        .launchScanner(this, AppContract.RequestCode.BOX_CODE);
+                break;
+            case R.id.btn_qrCode_card:
+                new MVBarcodeScanner.Builder()
+                        .setScanningMode(MVBarcodeScanner.ScanningMode.SINGLE_AUTO)
+                        .setFormats(Barcode.ALL_FORMATS)
+                        .build()
+                        .launchScanner(this, AppContract.RequestCode.CARD_CODE);
                 break;
             case R.id.rl_finger_print_right:
 //                pdFP = new ProgressDialog(SubscriberApplication.this);
@@ -1001,7 +1041,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                         }
                         Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         bm.copyPixelsFromBuffer(ByteBuffer.wrap(Bits));
-                        Payload.fingerPrint = FileUtils.convertBitmapToBase64(bm);
+                        Payload.fingerPrintRight = FileUtils.convertBitmapToBase64(bm);
 
                         if (isRightFingerprint) {
                             iv_finger_print_right.setImageBitmap(bm);
@@ -1033,7 +1073,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //                        }
 //                        Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 //                        bm.copyPixelsFromBuffer(ByteBuffer.wrap(Bits));
-//                        Payload.fingerPrint = FileUtils.convertBitmapToBase64(bm);
+//                        Payload.fingerPrintRight = FileUtils.convertBitmapToBase64(bm);
 //                        iv_finger_print_right.setImageBitmap(bm);
 //                        iv_finger_print_right.setFocusable(true);
 //                        iv_finger_print_right.setEnabled(true);
@@ -1078,13 +1118,23 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 case AppContract.RequestCode.CAMERA:
                     sendBackImagePath();
                     break;
-                    case AppContract.RequestCode.BAR_CODE:
-                        if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObject)) {
-                            Barcode mBarcode = data.getParcelableExtra(MVBarcodeScanner.BarcodeObject);
-                            System.out.println("Value: "+ mBarcode.rawValue);
-                        } else if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObjects)) {
-                            List<Barcode> mBarcodes = data.getParcelableArrayListExtra(MVBarcodeScanner.BarcodeObjects);
-                        }
+                case AppContract.RequestCode.BOX_CODE:
+                    if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObject)) {
+                        Barcode mBarcode = data.getParcelableExtra(MVBarcodeScanner.BarcodeObject);
+//                        System.out.println("Value: " + mBarcode.rawValue);
+                        et_box_code.setText(mBarcode.displayValue);
+                    } else if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObjects)) {
+                        List<Barcode> mBarcodes = data.getParcelableArrayListExtra(MVBarcodeScanner.BarcodeObjects);
+                    }
+                    break;
+                case AppContract.RequestCode.CARD_CODE:
+                    if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObject)) {
+                        Barcode mBarcode = data.getParcelableExtra(MVBarcodeScanner.BarcodeObject);
+//                        System.out.println("Value: " + mBarcode.rawValue);
+                        et_card_code.setText(mBarcode.displayValue);
+                    } else if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObjects)) {
+                        List<Barcode> mBarcodes = data.getParcelableArrayListExtra(MVBarcodeScanner.BarcodeObjects);
+                    }
                     break;
                 default:
                     break;
@@ -1291,16 +1341,17 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     private void setImageToPayload(Bitmap myBitmap) {
         encoded = FileUtils.convertBitmapToBase64(myBitmap);
-        if (iv_selected == iv_box) {
-//            Payload.boxCardPhoto = encoded;
-            Payload.boxPhoto = encoded;
-//            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
-//            else Payload.cardPhoto = encoded;
-        } else if (iv_selected == iv_card) {
-            Payload.cardPhoto = encoded;
-//            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
-//            else Payload.cardPhoto = encoded;
-        } else Payload.applicantPhoto = encoded;
+//        if (iv_selected == iv_box) {
+////            Payload.boxCardPhoto = encoded;
+//            Payload.boxPhoto = encoded;
+////            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
+////            else Payload.cardPhoto = encoded;
+//        } else if (iv_selected == iv_card) {
+//            Payload.cardPhoto = encoded;
+////            if (spn_box_cable_photo.getSelectedItemId() == 0) Payload.boxPhoto = encoded;
+////            else Payload.cardPhoto = encoded;
+//        } else
+        Payload.applicantPhoto = encoded;
     }
 
 

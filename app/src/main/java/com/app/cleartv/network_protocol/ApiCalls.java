@@ -26,6 +26,7 @@ public interface ApiCalls {
 //                                  @Field("PZone") String houseNo,
 //                                  @Field("PCountry") String wardNo,
             @Field("ContactNo") String contact_no,
+            @Field("AlternativeNo") String alt_contact_no,
             @Field("Email") String email,
             @Field("ApplicantSign") String applicantSign,
             @Field("BoxNoPhoto") String boxNoPhoto,
@@ -40,7 +41,9 @@ public interface ApiCalls {
             @Field("ClearTV") String clearTv,
             @Field("CableInternet") String cableInernet,
             @Field("FTTH") String ftth,
-            @Field("FingerPrint") String fingerprint
+            @Field("RightFingerPrint") String fingerprintRight,
+            @Field("LeftFingerPrint") String fingerprintLeft,
+            @Field("TermsAndConditionPhoto") String tncPhoto
     );
 
     @FormUrlEncoded

@@ -6,12 +6,16 @@ package com.app.cleartv.utils;
 
 public class Payload {
 
+    private static final String tempValue = "Empty";
+
     public static String applicantPhoto = "";
     public static String boxPhoto = "";
     public static String cardPhoto = "";
     public static String boxCardPhoto = "";
     public static String applicantSign = "";
-    public static String fingerPrint = "test";
+    public static String fingerPrintRight = tempValue;
+    public static String fingerPrintLeft = tempValue;
+    public static String tncPhoto = tempValue;
 
     public static void reset() {
         applicantPhoto = "";
@@ -19,6 +23,8 @@ public class Payload {
         cardPhoto = "";
         boxCardPhoto = "";
         applicantSign = "";
-        fingerPrint = "";
+        fingerPrintRight = tempValue;
+        fingerPrintLeft = tempValue;
+        tncPhoto = tempValue;
     }
 }

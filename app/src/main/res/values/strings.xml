@@ -166,8 +166,8 @@
 
     <string name="box_number">Box Number</string>
     <string name="card_number">Card Number</string>
-    <string name="right">RIGHT</string>
-    <string name="left">LEFT</string>
+    <string name="right">Right</string>
+    <string name="left">Left</string>
 
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
@@ -181,6 +181,10 @@
     <string name="barcode_success">Barcode read successfully</string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
-    <string name="scan_barcode">Scan Barcode</string>
+    <string name="scan_barcode_card">Card Code</string>
+    <string name="scan_barcode_box">Box Code</string>
+    <string name="setting">Settings</string>
+    <string name="skip_validation">Skip Validation</string>
+    <string name="alt_contact_mobile_no">Optional Contact/Mobile no</string>
 
 </resources>

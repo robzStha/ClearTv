@@ -6,6 +6,12 @@
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_exit_to_app_white_24dp"
         android:title="@string/logout"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_skip_validation"
+        android:icon="@drawable/ic_gesture_black_24dp"
+        android:title="@string/skip_validation"
+        android:visible="false"
+        app:showAsAction="collapseActionView"/>
 
 </menu>

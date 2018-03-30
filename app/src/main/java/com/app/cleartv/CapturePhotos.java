@@ -82,7 +82,7 @@ public class CapturePhotos extends AppCompatActivity implements View.OnClickList
                 else if (spn_box_cable_photo.getSelectedItemId() == 1 && iv_box_card.getDrawable() == null)
                     CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CARD);
                 else if (iv_applicant.getDrawable() == null)
-                    CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT);
+                    CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_PHOTO);
                 else {
                     if(spn_box_cable_photo.getSelectedItemId() == 0){
                         Payload.boxPhoto = encoded;

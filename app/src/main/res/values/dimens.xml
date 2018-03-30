@@ -18,4 +18,5 @@
     <dimen name="spc_2">2dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="spc_12">12sp</dimen>
 </resources>

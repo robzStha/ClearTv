@@ -23,11 +23,18 @@ public class AppContract {
 
     public class Errors {
         public static final String IMAGE_ERROR = "Image not found";
-        public static final String BOX_CARD = "Either box or cable photo of applicant is needed.";
+        public static final String BOX_CARD = "Either box or card code of applicant is needed.";
         public static final String BOX = "Please take a photo for box number";
         public static final String CARD = "Please take a photo for card number";
-        public static final String APPLICANT = "Please take a photo for applicant";
-        public static final String FINGERPRINT = "Both left & right fingerprint of applicant is needed.";
+        public static final String APPLICANT_PHOTO = "Please take a photo for applicant";
+        public static final String FINGERPRINT = "Both right & left fingerprint of applicant is needed.";
+        public static final String SIGNATURE = "Please provide applicant's signatures";
+        public static final String EMAIL = "Please enter a valid email";
+        public static final String TOLE_STREET = "Please enter the tole / street name of applicant";
+        public static final String TITLE = "Please enter the title";
+        public static final String APPLICANT_NAME = "Please enter the applicant's name";
+        public static final String NATIONALITY = "Please enter the applicant's nationality";
+        public static final String IDENTIFICATION = "Please enter the identification detail of applicant";
     }
 
     public class Permission {
@@ -41,7 +48,8 @@ public class AppContract {
         public static final int CAMERA = 100;
         public static final int GALLERY = 101;
         public static final int SIGNATURE = 102;
-        public static final int BAR_CODE = 103;
+        public static final int BOX_CODE = 103;
+        public static final int CARD_CODE = 104;
     }
 
     public class PARAMS {
