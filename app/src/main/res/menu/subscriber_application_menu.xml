@@ -11,7 +11,7 @@
         android:id="@+id/action_skip_validation"
         android:icon="@drawable/ic_gesture_black_24dp"
         android:title="@string/skip_validation"
-        android:visible="true"
+        android:visible="false"
         app:showAsAction="collapseActionView"/>
 
 </menu>
