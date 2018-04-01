@@ -35,6 +35,7 @@ public class AppContract {
         public static final String APPLICANT_NAME = "Please enter the applicant's name";
         public static final String NATIONALITY = "Please enter the applicant's nationality";
         public static final String IDENTIFICATION = "Please enter the identification detail of applicant";
+        public static final String CONTACT = "Please enter the contact number of applicant.";
     }
 
     public class Permission {

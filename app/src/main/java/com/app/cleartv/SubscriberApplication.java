@@ -14,6 +14,7 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -111,8 +112,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     EditText et_ward_no;
     @BindView(R.id.et_email)
     EditText et_email;
-    @BindView(R.id.et_contact_mobile_no)
-    EditText et_contact_mobile_no;
+    @BindView(R.id.et_contact_no)
+    EditText et_contact_no;
+    @BindView(R.id.et_mobile_no)
+    EditText et_mobile_no;
     @BindView(R.id.et_alt_contact_mobile_no)
     EditText et_alt_contact_mobile_no;
     @BindView(R.id.et_applicants_name)
@@ -286,79 +289,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 pb_loading.setVisibility(View.VISIBLE);
                 if (isValid()) {
                     if (MyApplication.hasNetwork()) {
-                        pd.show();
-                        pb_loading.setVisibility(View.INVISIBLE);
+//                        pb_loading.setVisibility(View.INVISIBLE);
 
                         printPostData();
+                        new APIHandler().execute();
 
-                        Call<Customer> customer = apiCalls.createCustomer(
-                                getSalutation(),
-                                et_applicants_name.getText().toString(),
-                                Payload.applicantPhoto,
-                                spn_gender.getSelectedItemId(),
-                                et_house_no.getText().toString(),
-                                et_ward_no.getText().toString(),
-                                et_tole_street_name.getText().toString(),
-                                et_vdc_municipality.getText().toString(),
-                                spn_district.getSelectedItem().toString(),
-                                et_contact_mobile_no.getText().toString(),
-                                et_alt_contact_mobile_no.getText().toString(),
-                                et_email.getText().toString(),
-                                Payload.applicantSign,
-                                Payload.boxPhoto,
-                                Payload.cardPhoto,
-                                sp_nationality.getSelectedItem().toString(),
-                                mPref.getStringValues(AppContract.Preferences.USER_ID),
-                                getOccupation(),
-                                et_citizen_passport.getText().toString(),
-                                isPassport() ? "true" : "false",
-                                sp_subscription_type.getSelectedItem().toString(),
-                                et_clear_tv.getText().toString(),
-                                et_cable_internet.getText().toString(),
-                                et_ftth.getText().toString(),
-                                Payload.fingerPrintRight,
-                                Payload.fingerPrintLeft,
-                                Payload.identityPhoto,
-                                Payload.tncPhoto
-                        );
-
-                        customer.enqueue(new Callback<Customer>() {
-                            @Override
-                            public void onResponse(Call<Customer> call, Response<Customer> response) {
-                                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                                    System.out.println("Rabin is testing: failure: " + response.code());
-                                    Converter<ResponseBody, CustomerErrorResponse> errorConverter =
-                                            RetrofitSingleton.getRetrofit().responseBodyConverter(CustomerErrorResponse.class, new Annotation[0]);
-                                    try {
-                                        CustomerErrorResponse error = errorConverter.convert(response.errorBody());
-                                        CustomAlertDialog.showAlertDialog(SubscriberApplication.this, error.getOdataError().getInnererror().getMessage());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else if (response != null && response.isSuccessful()) {
-                                    System.out.println("Rabin is testing: success");
-                                    CustomAlertDialog.showAlertDialogWithCallback(SubscriberApplication.this, "Applicant details saved successfully", new CustomAlertDialog.ConfirmationDialogCallback() {
-                                        @Override
-                                        public void onOkClicked() {
-                                            resetForm();
-                                        }
-
-                                        @Override
-                                        public void onCancelClicked() {
-
-                                        }
-                                    });
-                                }
-                                pd.hide();
-                            }
-
-                            @Override
-                            public void onFailure(Call<Customer> call, Throwable t) {
-                                System.out.println("Issue here");
-                                t.printStackTrace();
-                                pd.hide();
-                            }
-                        });
                     } else
                         CustomAlertDialog.showAlertDialog(SubscriberApplication.this, "No internet connection. Please connect to the internet and try again.");
 //                        Toast.makeText(SubscriberApplication.this, "No network", Toast.LENGTH_SHORT).show();
@@ -393,6 +328,101 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //            });
 
         });
+    }
+
+
+    public class APIHandler extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd.show();
+            pb_loading.setVisibility(View.INVISIBLE);
+            System.out.println("Rabin is testing; Request sent");
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            Call<Customer> customer = apiCalls.createCustomer(
+                    getSalutation(),
+                    et_applicants_name.getText().toString(),
+                    Payload.applicantPhoto,
+                    spn_gender.getSelectedItemId(),
+                    et_house_no.getText().toString(),
+                    et_ward_no.getText().toString(),
+                    et_tole_street_name.getText().toString(),
+                    et_vdc_municipality.getText().toString(),
+                    spn_district.getSelectedItem().toString(),
+                    et_contact_no.getText().toString(),
+                    et_mobile_no.getText().toString(),
+                    et_alt_contact_mobile_no.getText().toString(),
+                    et_email.getText().toString(),
+                    Payload.applicantSign,
+                    Payload.boxPhoto,
+                    Payload.cardPhoto,
+                    getNationality(),
+//                                sp_nationality.getSelectedItem().toString(),
+                    mPref.getStringValues(AppContract.Preferences.USER_ID),
+                    getOccupation(),
+                    et_citizen_passport.getText().toString(),
+                    isPassport() ? "true" : "false",
+                    sp_subscription_type.getSelectedItem().toString(),
+                    et_clear_tv.getText().toString(),
+                    et_cable_internet.getText().toString(),
+                    et_ftth.getText().toString(),
+                    Payload.fingerPrintRight,
+                    Payload.fingerPrintLeft,
+                    Payload.identityPhoto,
+                    Payload.tncPhoto
+            );
+
+            customer.enqueue(new Callback<Customer>() {
+                @Override
+                public void onResponse(Call<Customer> call, Response<Customer> response) {
+                    if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                        System.out.println("Rabin is testing: failure: " + response.code());
+                        Converter<ResponseBody, CustomerErrorResponse> errorConverter =
+                                RetrofitSingleton.getRetrofit().responseBodyConverter(CustomerErrorResponse.class, new Annotation[0]);
+                        try {
+                            CustomerErrorResponse error = errorConverter.convert(response.errorBody());
+                            CustomAlertDialog.showAlertDialog(SubscriberApplication.this, error.getOdataError().getInnererror().getMessage());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (response != null && response.isSuccessful()) {
+                        System.out.println("Rabin is testing: success");
+                        CustomAlertDialog.showAlertDialogWithCallback(SubscriberApplication.this, "Applicant details saved successfully", new CustomAlertDialog.ConfirmationDialogCallback() {
+                            @Override
+                            public void onOkClicked() {
+                                resetForm();
+                            }
+
+                            @Override
+                            public void onCancelClicked() {
+
+                            }
+                        });
+                    }
+                    pd.hide();
+                }
+
+                @Override
+                public void onFailure(Call<Customer> call, Throwable t) {
+                    System.out.println("Issue here");
+                    t.printStackTrace();
+                    pd.hide();
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+//            pd.hide();
+            System.out.println("Rabin is testing; Response claimed");
+        }
     }
 
     private boolean findBioMini() {
@@ -551,6 +581,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         et_card_code.getText().clear();
         iv_finger_print_left.setImageDrawable(null);
         iv_finger_print_right.setImageDrawable(null);
+        iv_identity.setImageDrawable(null);
+        iv_tnc.setImageDrawable(null);
         iv_sign.setImageDrawable(null);
         et_applicants_name.requestFocus();
     }
@@ -618,7 +650,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: Tole " + et_tole_street_name.getText().toString());
         System.out.println("Rabin is testing: Munc " + et_vdc_municipality.getText().toString());
         System.out.println("Rabin is testing: District " + spn_district.getSelectedItem().toString());
-        System.out.println("Rabin is testing: Mobile " + et_contact_mobile_no.getText().toString());
+        System.out.println("Rabin is testing: Contact " + et_contact_no.getText().toString());
+        System.out.println("Rabin is testing: Mobile " + et_mobile_no.getText().toString());
         System.out.println("Rabin is testing: Alt Mobile " + et_alt_contact_mobile_no.getText().toString());
         System.out.println("Rabin is testing: Email " + et_email.getText().toString());
         if (Payload.applicantSign.length() > 0)
@@ -637,7 +670,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: Cable " + et_cable_internet.getText().toString());
         System.out.println("Rabin is testing: FTTH " + et_ftth.getText().toString());
         if (Payload.fingerPrintRight.length() > 0)
-            System.out.println("Rabin is testing: Fingerprint " + Payload.fingerPrintRight);
+            System.out.println("Rabin is testing: FingerprintRight " + Payload.fingerPrintRight);
+        System.out.println("Rabin is testing: FingerprintLeft " + Payload.fingerPrintLeft);
+        System.out.println("Rabin is testing: Identity " + Payload.identityPhoto);
+        System.out.println("Rabin is testing: TnC " + Payload.tncPhoto);
     }
 
     private String getOccupation() {
@@ -697,6 +733,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         } else if (et_tole_street_name.getText().toString().equals("")) {
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.TOLE_STREET);
+            isValid = false;
+        } else if (et_contact_no.getText().toString().trim().length() == 0) {
+            pb_loading.setVisibility(View.INVISIBLE);
+            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CONTACT);
             isValid = false;
         } else if (!CommonMethods.isValidEmail(et_email.getText())) {
             pb_loading.setVisibility(View.INVISIBLE);
@@ -1040,15 +1080,16 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                         }
                         Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         bm.copyPixelsFromBuffer(ByteBuffer.wrap(Bits));
-                        Payload.fingerPrintRight = FileUtils.convertBitmapToBase64(bm);
 
                         if (isRightFingerprint) {
+                            Payload.fingerPrintRight = FileUtils.convertBitmapToBase64(bm);
                             iv_finger_print_right.setImageBitmap(bm);
                             rl_finger_print_right.setFocusable(true);
                             rl_finger_print_right.setEnabled(true);
                             rl_finger_print_right.requestFocus();
                             iv_finger_print_right.invalidate();
                         } else {
+                            Payload.fingerPrintLeft = FileUtils.convertBitmapToBase64(bm);
                             iv_finger_print_left.setImageBitmap(bm);
                             rl_finger_print_left.setFocusable(true);
                             rl_finger_print_left.setEnabled(true);

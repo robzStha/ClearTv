@@ -412,10 +412,21 @@
                 android:background="@color/colorPrimary" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/et_contact_mobile_no"
+                android:id="@+id/et_contact_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/contact_mobile_no"
+                android:hint="@string/contact_no"
+                android:inputType="number"
+                android:textSize="16sp"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_singleLineEllipsis="true" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_mobile_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/mobile_no"
                 android:inputType="number"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
@@ -661,20 +672,21 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="11">
+
                         <Button
-                            android:layout_weight="4"
-                            android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
                             android:id="@+id/btn_qrCode_box"
                             android:layout_width="0dp"
-                            android:textSize="@dimen/txt_12"
                             android:layout_height="wrap_content"
-                            android:text="@string/scan_barcode_box" />
+                            android:layout_weight="4"
+                            android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
+                            android:text="@string/scan_barcode_box"
+                            android:textSize="@dimen/txt_12" />
 
                         <EditText
                             android:id="@+id/et_box_code"
                             android:layout_width="0dp"
-                            android:layout_weight="7"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_weight="7" />
 
                     </LinearLayout>
 
@@ -682,23 +694,24 @@
                         android:id="@+id/ll_qrCode_card"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_marginBottom="@dimen/spc_8"
+                        android:orientation="horizontal"
                         android:weightSum="11">
+
                         <Button
-                            android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
                             android:id="@+id/btn_qrCode_card"
-                            android:layout_weight="4"
-                            android:textSize="@dimen/txt_12"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/scan_barcode_card" />
+                            android:layout_weight="4"
+                            android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
+                            android:text="@string/scan_barcode_card"
+                            android:textSize="@dimen/txt_12" />
 
                         <EditText
                             android:id="@+id/et_card_code"
                             android:layout_width="0dp"
-                            android:layout_weight="7"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_weight="7" />
 
                     </LinearLayout>
 
@@ -818,8 +831,8 @@
                             android:id="@+id/rl_finger_print_right"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/spc_2"
                             android:layout_marginLeft="@dimen/spc_2"
+                            android:layout_marginRight="@dimen/spc_2"
                             android:layout_weight="1"
                             android:background="@drawable/bg_shadow_">
 
@@ -831,14 +844,14 @@
                                 android:focusableInTouchMode="true" />
 
                             <TextView
-                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/spc_1"
                                 android:background="@drawable/top_rounded_bg"
                                 android:gravity="center"
                                 android:text="@string/right"
-                                android:textColor="@android:color/white" />
+                                android:textColor="@android:color/white"
+                                android:visibility="gone" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -865,14 +878,14 @@
                                 android:focusableInTouchMode="true" />
 
                             <TextView
-                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/spc_1"
                                 android:background="@drawable/top_rounded_bg"
                                 android:gravity="center"
                                 android:text="@string/left"
-                                android:textColor="@android:color/white" />
+                                android:textColor="@android:color/white"
+                                android:visibility="gone" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -949,20 +962,20 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
                         android:layout_margin="@dimen/spc_1"
                         android:background="@drawable/top_rounded_bg"
                         android:gravity="center"
-                        android:layout_alignParentBottom="true"
                         android:text="@string/identity"
                         android:textColor="@android:color/white" />
 
                     <!--<ImageView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_alignParentBottom="true"-->
-                        <!--android:layout_alignParentRight="true"-->
-                        <!--android:padding="@dimen/spc_4"-->
-                        <!--android:src="@drawable/ic_fingerprint_black_24dp" />-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:padding="@dimen/spc_4"-->
+                    <!--android:src="@drawable/ic_fingerprint_black_24dp" />-->
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -984,20 +997,20 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
                         android:layout_margin="@dimen/spc_1"
                         android:background="@drawable/top_rounded_bg"
                         android:gravity="center"
                         android:text="@string/tncPhoto"
-                        android:layout_alignParentBottom="true"
                         android:textColor="@android:color/white" />
 
                     <!--<ImageView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_alignParentBottom="true"-->
-                        <!--android:layout_alignParentRight="true"-->
-                        <!--android:padding="@dimen/spc_4"-->
-                        <!--android:src="@drawable/ic_fingerprint_black_24dp" />-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:padding="@dimen/spc_4"-->
+                    <!--android:src="@drawable/ic_fingerprint_black_24dp" />-->
                 </RelativeLayout>
             </LinearLayout>
 

@@ -67,18 +67,21 @@ public class Login extends AppCompatActivity {
                                         CustomAlertDialog.showAlertDialog(Login.this, error.getErrorDescription());
                                     } catch (IOException e) {
                                         e.printStackTrace();
+                                    }finally {
+                                        btn_login.setEnabled(true);
+                                        pb_loading.setVisibility(View.INVISIBLE);
                                     }
                                 } else if (response != null && response.isSuccessful()) {
                                     LoginResponse loginResponse = response.body();
                                     mPrefs = new MySharedPreference(Login.this);
                                     mPrefs.setKeyValues(AppContract.Preferences.ACCESS_TOKEN, loginResponse.getAccessToken());
                                     mPrefs.setKeyValues(AppContract.Preferences.USER_ID, loginResponse.getId());
+                                    btn_login.setEnabled(true);
+                                    pb_loading.setVisibility(View.INVISIBLE);
                                     Intent i = new Intent(Login.this, SubscriberApplication.class);
                                     startActivity(i);
                                     finish();
                                 }
-                                pb_loading.setVisibility(View.INVISIBLE);
-                                btn_login.setEnabled(true);
                             }
 
                             @Override
