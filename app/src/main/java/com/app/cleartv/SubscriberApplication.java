@@ -970,24 +970,32 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 break;
             case R.id.rl_finger_print_right:
                 isRightFingerprint = true;
-                System.out.print("Rabin is testing: Progress dialog shown");
-                rl_finger_print_right.setEnabled(false);
-                rl_finger_print_right.setClickable(false);
-                rl_finger_print_right.setFocusable(true);
-                rl_finger_print_right.requestFocus();
+//                System.out.print("Rabin is testing: Progress dialog shown");
+                setupFingerPrintBtn();
                 if (initBioMini())
                     captureFingerPrint();
                 break;
             case R.id.rl_finger_print_left:
                 isRightFingerprint = false;
-                System.out.print("Rabin is testing: Progress dialog shown");
-                rl_finger_print_left.setEnabled(false);
-                rl_finger_print_left.setClickable(false);
-                rl_finger_print_left.setFocusable(true);
-                rl_finger_print_left.requestFocus();
+//                System.out.print("Rabin is testing: Progress dialog shown");
+                setupFingerPrintBtn();
                 if (initBioMini())
                     captureFingerPrint();
                 break;
+        }
+    }
+
+    private void setupFingerPrintBtn() {
+        if (isRightFingerprint) {
+            rl_finger_print_right.setEnabled(false);
+            rl_finger_print_right.setClickable(false);
+            rl_finger_print_right.setFocusable(true);
+            rl_finger_print_right.requestFocus();
+        } else {
+            rl_finger_print_left.setEnabled(false);
+            rl_finger_print_left.setClickable(false);
+            rl_finger_print_left.setFocusable(true);
+            rl_finger_print_left.requestFocus();
         }
     }
 
@@ -1085,6 +1093,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                             Payload.fingerPrintRight = FileUtils.convertBitmapToBase64(bm);
                             iv_finger_print_right.setImageBitmap(bm);
                             rl_finger_print_right.setFocusable(true);
+                            rl_finger_print_left.setClickable(true);
                             rl_finger_print_right.setEnabled(true);
                             rl_finger_print_right.requestFocus();
                             iv_finger_print_right.invalidate();
@@ -1124,6 +1133,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             }
 //            pdFP.hide();
 
+            enableFingerPrintBtn();
+        }
+
+        private void enableFingerPrintBtn() {
             if (isRightFingerprint) {
                 rl_finger_print_right.setEnabled(true);
                 rl_finger_print_right.setClickable(true);
@@ -1136,6 +1149,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         @Override
         public void onErrorOccurred(String msg) {
 //            pdFP.hide();
+            enableFingerPrintBtn();
         }
     };
 
