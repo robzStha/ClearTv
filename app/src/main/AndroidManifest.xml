@@ -51,9 +51,9 @@
         <activity
             android:name=".Login"
             android:theme="@style/LoginTheme" />
-        <activity android:name=".barcodereader.BarCodeActivity"></activity>
-        <activity android:name=".barcodereader.BarcodeCaptureActivity"
-            android:theme="@style/SignatureTheme"></activity>
+        <!--<activity android:name=".barcodereader.BarCodeActivity"></activity>-->
+        <!--<activity android:name=".barcodereader.BarcodeCaptureActivity"-->
+            <!--android:theme="@style/SignatureTheme"></activity>-->
     </application>
 
 </manifest>

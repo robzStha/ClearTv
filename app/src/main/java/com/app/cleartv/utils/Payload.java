@@ -1,5 +1,7 @@
 package com.app.cleartv.utils;
 
+import com.slmyldz.random.Randoms;
+
 /**
  * Created by Dell on 3/8/2018.
  */
@@ -29,5 +31,17 @@ public class Payload {
         fingerPrintLeft = tempValue;
         tncPhoto = tempValue;
         identityPhoto = tempValue;
+    }
+
+    public static void fakeInit(String image) {
+        applicantPhoto = image;
+        boxPhoto = Randoms.alphaNumericString(10);
+        cardPhoto = Randoms.alphaNumericString(10);
+        boxCardPhoto = image;
+        applicantSign = image;
+        fingerPrintRight = image;
+        fingerPrintLeft = image;
+        tncPhoto = image;
+        identityPhoto = image;
     }
 }
