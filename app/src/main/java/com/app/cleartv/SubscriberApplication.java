@@ -450,7 +450,20 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         if (ufa_res != BioMiniAndroid.ECODE.OK) {
             isDeviceAvailable = false;
             mBioMiniHandle.UFA_Uninit();
-            CustomAlertDialog.showAlertDialog(this, "Error message from findBioMini: " + errmsg);
+//            CustomAlertDialog.showAlertDialog(this, "Error message from findBioMini: " + errmsg);
+            CustomAlertDialog.showAlertDialogWithCallback(this, "Error while seeking fingerprint device " + errmsg, new CustomAlertDialog.ConfirmationDialogCallback() {
+                @Override
+                public void onOkClicked() {
+//                    iv_finger_print_left.setClickable(true);
+//                    iv_finger_print_right.setClickable(true);
+                }
+
+                @Override
+                public void onCancelClicked() {
+
+                }
+            });
+
         }
 
 //        mBioMiniHandle.UFA_SetDeviceCallback(new IBioMiniDeviceCallback() {
@@ -997,13 +1010,13 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     private void setupFingerPrintBtn() {
         if (isRightFingerprint) {
-            rl_finger_print_right.setEnabled(false);
-            rl_finger_print_right.setClickable(false);
+//            rl_finger_print_right.setEnabled(false);
+//            rl_finger_print_right.setClickable(false);
             rl_finger_print_right.setFocusable(true);
             rl_finger_print_right.requestFocus();
         } else {
-            rl_finger_print_left.setEnabled(false);
-            rl_finger_print_left.setClickable(false);
+//            rl_finger_print_left.setEnabled(false);
+//            rl_finger_print_left.setClickable(false);
             rl_finger_print_left.setFocusable(true);
             rl_finger_print_left.requestFocus();
         }
@@ -1020,8 +1033,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                     isUFAInitialized = true;
                     BioMiniHelper.setParams(mBioMiniHandle, ufa_res);
                 } else
-                    CustomAlertDialog.showAlertDialog(this, "Error from initBioMini: " + mBioMiniHandle.UFA_GetErrorString(ufa_res));
+//                    CustomAlertDialog.showAlertDialog(this, "Error from initBioMini: " + mBioMiniHandle.UFA_GetErrorString(ufa_res));
+                    CustomAlertDialog.showAlertDialog(this, "Error while initializing fingerprint device: " + mBioMiniHandle.UFA_GetErrorString(ufa_res));
 
+//                iv_finger_print_left.setClickable(true);
+//                iv_finger_print_right.setClickable(true);
             }
         }
         return isUFAInitialized;
@@ -1051,7 +1067,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
             if (ufa_res != BioMiniAndroid.ECODE.OK) {
 //                pdFP.hide();
-                CustomAlertDialog.showAlertDialog(this, "Error msg from CaptureFingerPrint: " + errmsg);
+                CustomAlertDialog.showAlertDialog(this, "Error while capturing FingerPrint: " + errmsg);
             }
 
             int width = mBioMiniHandle.getImageWidth();
@@ -1214,11 +1230,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     private void PopulateData() {
         et_applicants_name.setText(Randoms.name(getApplicationContext()));
-        et_contact_no.setText(Randoms.Integer(900000000, 999999999)+"");
+        et_contact_no.setText(Randoms.Integer(900000000, 999999999) + "");
         et_email.setText(Randoms.email(getApplicationContext()));
         et_citizen_passport.setText(Randoms.alphaNumericString(7));
-        et_house_no.setText(Randoms.Integer(1, 10)+"");
-        et_ward_no.setText(Randoms.Integer(1, 10)+"");
+        et_house_no.setText(Randoms.Integer(1, 10) + "");
+        et_ward_no.setText(Randoms.Integer(1, 10) + "");
         et_tole_street_name.setText(Randoms.name(getApplicationContext()));
         et_vdc_municipality.setText(Randoms.name(getApplicationContext()));
         int ranDrawable = getRandomDrawable();
