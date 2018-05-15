@@ -365,8 +365,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                     et_alt_contact_mobile_no.getText().toString(),
                     et_email.getText().toString(),
                     Payload.applicantSign,
-                    Payload.boxPhoto,
-                    Payload.cardPhoto,
+                    et_box_code.getText().toString(),
+                    et_card_code.getText().toString(),
                     getNationality(),
 //                                sp_nationality.getSelectedItem().toString(),
                     mPref.getStringValues(AppContract.Preferences.USER_ID),
@@ -679,10 +679,12 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: Email " + et_email.getText().toString());
         if (Payload.applicantSign.length() > 0)
             System.out.println("Rabin is testing: Signature " + Payload.applicantSign);
-        if (Payload.boxPhoto.length() > 0)
-            System.out.println("Rabin is testing: Box Photo " + Payload.boxPhoto);
-        if (Payload.cardPhoto.length() > 0)
-            System.out.println("Rabin is testing: Card Photo " + Payload.cardPhoto);
+//        if (Payload.boxPhoto.length() > 0)
+            System.out.println("Rabin is testing: Box Photo " +
+                            et_box_code.getText().toString());
+//        if (Payload.cardPhoto.length() > 0)
+            System.out.println("Rabin is testing: Card Photo " +
+                    et_card_code.getText().toString());
         System.out.println("Rabin is testing: Nationality " + sp_nationality.getSelectedItem().toString());
         System.out.println("Rabin is testing: User Id " + mPref.getStringValues(AppContract.Preferences.USER_ID));
         System.out.println("Rabin is testing: Job type " + getOccupation());
