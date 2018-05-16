@@ -31,12 +31,12 @@ public class OdataError {
         this.message = message;
     }
 
-    public Innererror getInnererror() {
-        return innererror;
-    }
-
-    public void setInnererror(Innererror innererror) {
-        this.innererror = innererror;
-    }
+//    public Innererror getInnererror() {
+//        return innererror;
+//    }
+//
+//    public void setInnererror(Innererror innererror) {
+//        this.innererror = innererror;
+//    }
 
 }

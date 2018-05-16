@@ -668,7 +668,7 @@ public class FileUtils {
             rotatedBitmap = bmpPic;
         }
 
-        int compressQuality = 100; // quality decreasing by 5 every loop.
+        int compressQuality = 75; // quality decreasing by 5 every loop.
         int streamLength;
         do {
             ByteArrayOutputStream bmpStream = new ByteArrayOutputStream();

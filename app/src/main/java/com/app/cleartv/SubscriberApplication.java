@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.media.ExifInterface;
@@ -63,6 +64,7 @@ import com.app.cleartv.utils.MySharedPreference;
 import com.app.cleartv.utils.Payload;
 import com.app.cleartv.utils.ViewUtils;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.slmyldz.random.Randoms;
 import com.suprema.BioMiniAndroid;
 import com.suprema.IBioMiniCallback;
 
@@ -76,6 +78,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -199,6 +202,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     @BindView(R.id.et_card_code)
     EditText et_card_code;
+
+    String card_code;
+    String box_code;
 
     ProgressDialog pd;
 
@@ -386,9 +392,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                                 RetrofitSingleton.getRetrofit().responseBodyConverter(CustomerErrorResponse.class, new Annotation[0]);
                         try {
                             CustomerErrorResponse error = errorConverter.convert(response.errorBody());
-                            CustomAlertDialog.showAlertDialog(SubscriberApplication.this, error.getOdataError().getInnererror().getMessage());
+                            CustomAlertDialog.showAlertDialog(SubscriberApplication.this, error.getOdataError().getMessage().getValue());
                         } catch (IOException e) {
                             e.printStackTrace();
+                            e.getMessage();
                         }
                     } else if (response != null && response.isSuccessful()) {
                         System.out.println("Rabin is testing: success");
@@ -443,7 +450,20 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         if (ufa_res != BioMiniAndroid.ECODE.OK) {
             isDeviceAvailable = false;
             mBioMiniHandle.UFA_Uninit();
-            CustomAlertDialog.showAlertDialog(this, "Error message from findBioMini: " + errmsg);
+//            CustomAlertDialog.showAlertDialog(this, "Error message from findBioMini: " + errmsg);
+            CustomAlertDialog.showAlertDialogWithCallback(this, "Error while seeking fingerprint device " + errmsg, new CustomAlertDialog.ConfirmationDialogCallback() {
+                @Override
+                public void onOkClicked() {
+//                    iv_finger_print_left.setClickable(true);
+//                    iv_finger_print_right.setClickable(true);
+                }
+
+                @Override
+                public void onCancelClicked() {
+
+                }
+            });
+
         }
 
 //        mBioMiniHandle.UFA_SetDeviceCallback(new IBioMiniDeviceCallback() {
@@ -630,6 +650,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                     Toast.makeText(SubscriberApplication.this, "Validation Skipped", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(SubscriberApplication.this, "Validation Enabled", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_init_fake:
+                PopulateData();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
@@ -970,24 +993,32 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 break;
             case R.id.rl_finger_print_right:
                 isRightFingerprint = true;
-                System.out.print("Rabin is testing: Progress dialog shown");
-                rl_finger_print_right.setEnabled(false);
-                rl_finger_print_right.setClickable(false);
-                rl_finger_print_right.setFocusable(true);
-                rl_finger_print_right.requestFocus();
+//                System.out.print("Rabin is testing: Progress dialog shown");
+                setupFingerPrintBtn();
                 if (initBioMini())
                     captureFingerPrint();
                 break;
             case R.id.rl_finger_print_left:
                 isRightFingerprint = false;
-                System.out.print("Rabin is testing: Progress dialog shown");
-                rl_finger_print_left.setEnabled(false);
-                rl_finger_print_left.setClickable(false);
-                rl_finger_print_left.setFocusable(true);
-                rl_finger_print_left.requestFocus();
+//                System.out.print("Rabin is testing: Progress dialog shown");
+                setupFingerPrintBtn();
                 if (initBioMini())
                     captureFingerPrint();
                 break;
+        }
+    }
+
+    private void setupFingerPrintBtn() {
+        if (isRightFingerprint) {
+//            rl_finger_print_right.setEnabled(false);
+//            rl_finger_print_right.setClickable(false);
+            rl_finger_print_right.setFocusable(true);
+            rl_finger_print_right.requestFocus();
+        } else {
+//            rl_finger_print_left.setEnabled(false);
+//            rl_finger_print_left.setClickable(false);
+            rl_finger_print_left.setFocusable(true);
+            rl_finger_print_left.requestFocus();
         }
     }
 
@@ -1002,8 +1033,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                     isUFAInitialized = true;
                     BioMiniHelper.setParams(mBioMiniHandle, ufa_res);
                 } else
-                    CustomAlertDialog.showAlertDialog(this, "Error from initBioMini: " + mBioMiniHandle.UFA_GetErrorString(ufa_res));
+//                    CustomAlertDialog.showAlertDialog(this, "Error from initBioMini: " + mBioMiniHandle.UFA_GetErrorString(ufa_res));
+                    CustomAlertDialog.showAlertDialog(this, "Error while initializing fingerprint device: " + mBioMiniHandle.UFA_GetErrorString(ufa_res));
 
+//                iv_finger_print_left.setClickable(true);
+//                iv_finger_print_right.setClickable(true);
             }
         }
         return isUFAInitialized;
@@ -1033,7 +1067,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
             if (ufa_res != BioMiniAndroid.ECODE.OK) {
 //                pdFP.hide();
-                CustomAlertDialog.showAlertDialog(this, "Error msg from CaptureFingerPrint: " + errmsg);
+                CustomAlertDialog.showAlertDialog(this, "Error while capturing FingerPrint: " + errmsg);
             }
 
             int width = mBioMiniHandle.getImageWidth();
@@ -1085,6 +1119,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                             Payload.fingerPrintRight = FileUtils.convertBitmapToBase64(bm);
                             iv_finger_print_right.setImageBitmap(bm);
                             rl_finger_print_right.setFocusable(true);
+                            rl_finger_print_left.setClickable(true);
                             rl_finger_print_right.setEnabled(true);
                             rl_finger_print_right.requestFocus();
                             iv_finger_print_right.invalidate();
@@ -1124,6 +1159,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             }
 //            pdFP.hide();
 
+            enableFingerPrintBtn();
+        }
+
+        private void enableFingerPrintBtn() {
             if (isRightFingerprint) {
                 rl_finger_print_right.setEnabled(true);
                 rl_finger_print_right.setClickable(true);
@@ -1136,6 +1175,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         @Override
         public void onErrorOccurred(String msg) {
 //            pdFP.hide();
+            enableFingerPrintBtn();
         }
     };
 
@@ -1161,8 +1201,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 case AppContract.RequestCode.BOX_CODE:
                     if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObject)) {
                         Barcode mBarcode = data.getParcelableExtra(MVBarcodeScanner.BarcodeObject);
-//                        System.out.println("Value: " + mBarcode.rawValue);
-                        et_box_code.setText(mBarcode.displayValue);
+                        System.out.println("Value: " + mBarcode.rawValue);
+                        et_box_code.setText(mBarcode.rawValue);
+//                        et_box_code.setText(mBarcode.displayValue);
                     } else if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObjects)) {
                         List<Barcode> mBarcodes = data.getParcelableArrayListExtra(MVBarcodeScanner.BarcodeObjects);
                     }
@@ -1170,8 +1211,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                 case AppContract.RequestCode.CARD_CODE:
                     if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObject)) {
                         Barcode mBarcode = data.getParcelableExtra(MVBarcodeScanner.BarcodeObject);
-//                        System.out.println("Value: " + mBarcode.rawValue);
-                        et_card_code.setText(mBarcode.displayValue);
+                        System.out.println("Raw Value: " + mBarcode.rawValue);
+                        et_card_code.setText(mBarcode.rawValue);
+//                        et_card_code.setText(mBarcode.displayValue);
                     } else if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObjects)) {
                         List<Barcode> mBarcodes = data.getParcelableArrayListExtra(MVBarcodeScanner.BarcodeObjects);
                     }
@@ -1184,6 +1226,47 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             rl_sign.requestFocus();
         }
 
+    }
+
+    private void PopulateData() {
+        et_applicants_name.setText(Randoms.name(getApplicationContext()));
+        et_contact_no.setText(Randoms.Integer(900000000, 999999999) + "");
+        et_email.setText(Randoms.email(getApplicationContext()));
+        et_citizen_passport.setText(Randoms.alphaNumericString(7));
+        et_house_no.setText(Randoms.Integer(1, 10) + "");
+        et_ward_no.setText(Randoms.Integer(1, 10) + "");
+        et_tole_street_name.setText(Randoms.name(getApplicationContext()));
+        et_vdc_municipality.setText(Randoms.name(getApplicationContext()));
+        int ranDrawable = getRandomDrawable();
+        iv_sign.setImageDrawable(getDrawable(ranDrawable));
+        iv_applicant.setImageDrawable(getDrawable(ranDrawable));
+        iv_finger_print_right.setImageDrawable(getDrawable(ranDrawable));
+        iv_finger_print_left.setImageDrawable(getDrawable(ranDrawable));
+        iv_tnc.setImageDrawable(getDrawable(ranDrawable));
+        iv_identity.setImageDrawable(getDrawable(ranDrawable));
+        BitmapDrawable drawable = (BitmapDrawable) getDrawable(ranDrawable);
+        Bitmap bitmap = drawable.getBitmap();
+        current_bmp = bitmap;
+        Payload.fakeInit(FileUtils.convertBitmapToBase64(bitmap));
+        et_box_code.setText(Randoms.alphaNumericString(10));
+        et_card_code.setText(Randoms.alphaNumericString(10));
+    }
+
+    private int getRandomDrawable() {
+        Random r = new Random();
+        int i1 = Randoms.Integer(1, 3);
+        switch (i1) {
+            case 3:
+                i1 = R.drawable.tempimg;
+                break;
+            case 1:
+                i1 = R.drawable.lion;
+                break;
+            case 2:
+                i1 = R.drawable.logo_cleartv;
+                break;
+        }
+        return i1;
     }
 
 

@@ -189,5 +189,6 @@
     <string name="identity">Identity Photo</string>
     <string name="tncPhoto"><![CDATA[T&C Photo]]></string>
     <string name="mobile_no">Mobile No</string>
+    <string name="init_fake">Populate data</string>
 
 </resources>
