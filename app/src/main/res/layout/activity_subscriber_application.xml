@@ -677,19 +677,36 @@
                             android:id="@+id/btn_qrCode_box"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"
+                            android:layout_weight="0"
                             android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
                             android:text="@string/scan_barcode_box"
-                            android:textSize="@dimen/txt_12" />
+                            android:textSize="@dimen/txt_12"
+                            android:visibility="gone" />
 
-                        <EditText
+                        <com.rengwuxian.materialedittext.MaterialEditText
                             android:id="@+id/et_box_code"
                             android:layout_width="0dp"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spc_16"
+                            android:layout_weight="11"
+                            android:focusableInTouchMode="true"
+                            android:hint="@string/box_number"
                             android:maxLines="1"
-                            android:layout_weight="7" />
+                            android:textSize="16sp"
+                            app:met_floatingLabel="highlight"
+                            app:met_primaryColor="?colorAccent"
+                            app:met_singleLineEllipsis="true" />
+
+
+                        <!--<EditText-->
+                        <!--android:id="@+id/et_box_code"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="11"-->
+                        <!--android:focusable="true"-->
+                        <!--android:hint="Box Code"-->
+                        <!--android:focusableInTouchMode="true"-->
+                        <!--android:maxLines="1" />-->
 
                     </LinearLayout>
 
@@ -705,19 +722,35 @@
                             android:id="@+id/btn_qrCode_card"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"
+                            android:layout_weight="0"
                             android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
                             android:text="@string/scan_barcode_card"
-                            android:textSize="@dimen/txt_12" />
+                            android:textSize="@dimen/txt_12"
+                            android:visibility="gone" />
 
-                        <EditText
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
+                        <!--<EditText-->
+                            <!--android:id="@+id/et_card_code"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="11"-->
+                            <!--android:focusable="true"-->
+                            <!--android:focusableInTouchMode="true"-->
+                            <!--android:hint="Card Code"-->
+                            <!--android:maxLines="1" />-->
+
+                        <com.rengwuxian.materialedittext.MaterialEditText
                             android:id="@+id/et_card_code"
-                            android:maxLines="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="7" />
+                            android:layout_marginBottom="@dimen/spc_16"
+                            android:layout_weight="11"
+                            android:focusableInTouchMode="true"
+                            android:hint="@string/card_number"
+                            android:maxLines="1"
+                            android:textSize="16sp"
+                            app:met_floatingLabel="highlight"
+                            app:met_primaryColor="?colorAccent"
+                            app:met_singleLineEllipsis="true" />
 
                     </LinearLayout>
 
@@ -839,15 +872,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/spc_2"
                             android:layout_marginRight="@dimen/spc_2"
-                            android:clickable="true"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_shadow_">
+                            android:background="@drawable/bg_shadow_"
+                            android:clickable="true">
 
                             <ImageView
                                 android:id="@+id/iv_finger_print_right"
                                 android:layout_width="match_parent"
-                                android:layout_margin="@dimen/spc_1"
                                 android:layout_height="180dp"
+                                android:layout_margin="@dimen/spc_1"
                                 android:focusable="true"
                                 android:focusableInTouchMode="true" />
 
@@ -880,9 +913,9 @@
 
                             <ImageView
                                 android:id="@+id/iv_finger_print_left"
-                                android:layout_margin="@dimen/spc_1"
                                 android:layout_width="match_parent"
                                 android:layout_height="180dp"
+                                android:layout_margin="@dimen/spc_1"
                                 android:focusable="true"
                                 android:focusableInTouchMode="true" />
 

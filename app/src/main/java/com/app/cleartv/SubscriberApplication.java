@@ -680,11 +680,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         if (Payload.applicantSign.length() > 0)
             System.out.println("Rabin is testing: Signature " + Payload.applicantSign);
 //        if (Payload.boxPhoto.length() > 0)
-            System.out.println("Rabin is testing: Box Photo " +
-                            et_box_code.getText().toString());
+            System.out.println("Rabin is testing: Box Photo " + et_box_code.getText().toString());
 //        if (Payload.cardPhoto.length() > 0)
-            System.out.println("Rabin is testing: Card Photo " +
-                    et_card_code.getText().toString());
+            System.out.println("Rabin is testing: Card Photo " + et_card_code.getText().toString());
         System.out.println("Rabin is testing: Nationality " + sp_nationality.getSelectedItem().toString());
         System.out.println("Rabin is testing: User Id " + mPref.getStringValues(AppContract.Preferences.USER_ID));
         System.out.println("Rabin is testing: Job type " + getOccupation());
