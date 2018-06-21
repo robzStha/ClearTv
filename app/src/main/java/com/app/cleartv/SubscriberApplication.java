@@ -158,6 +158,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @BindView(R.id.pb_loading)
     ProgressBar pb_loading;
 
+    @BindView(R.id.tv_right)
+    TextView tv_right;
+    @BindView(R.id.tv_left)
+    TextView tv_left;
+
     ImageView iv_selected;
 
     @BindView(R.id.iv_applicant)
@@ -207,6 +212,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     String box_code;
 
     ProgressDialog pd;
+    boolean setFingerPrint = false;
 
     boolean isRightFingerPrint = true;
 
@@ -239,10 +245,18 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
 
-        registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
-        registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_DETACHED));
+        if(setFingerPrint) {
+            registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
+            registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_DETACHED));
 
-        findBioMini();
+            findBioMini();
+        }else {
+            rl_finger_print_left.setVisibility(View.GONE);
+            rl_finger_print_right.setVisibility(View.GONE);
+
+            tv_left.setVisibility(View.GONE);
+            tv_right.setVisibility(View.GONE);
+        }
 
         if (!mPref.getStringValues(AppContract.Preferences.ACCESS_TOKEN).isEmpty())
             btn_login_submit.setText(R.string.submit);
@@ -272,8 +286,10 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         iv_nationality_del.setOnClickListener(this);
         iv_salutation_del.setOnClickListener(this);
         rl_sign.setOnClickListener(this);
-        rl_finger_print_right.setOnClickListener(this);
-        rl_finger_print_left.setOnClickListener(this);
+        if(setFingerPrint) {
+            rl_finger_print_right.setOnClickListener(this);
+            rl_finger_print_left.setOnClickListener(this);
+        }
         btn_qrCode_box.setOnClickListener(this);
         btn_qrCode_card.setOnClickListener(this);
         rl_identity.setOnClickListener(this);
@@ -579,9 +595,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         // TODO Auto-generated method stub
         super.onPause();
 
-        mBioMiniHandle.UFA_AbortCapturing();
-        mBioMiniHandle.UFA_Uninit();
-        isUFAInitialized = false;
+        if(setFingerPrint) {
+            mBioMiniHandle.UFA_AbortCapturing();
+            mBioMiniHandle.UFA_Uninit();
+            isUFAInitialized = false;
+        }
     }
 
     private void resetForm() {
@@ -799,9 +817,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //            isValid = false;
 //        }
         else if (iv_finger_print_right.getDrawable() == null || iv_finger_print_left.getDrawable() == null) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.FINGERPRINT);
-            isValid = false;
+            if(setFingerPrint) {
+                pb_loading.setVisibility(View.INVISIBLE);
+                CustomAlertDialog.showAlertDialog(this, AppContract.Errors.FINGERPRINT);
+                isValid = false;
+            }
         }
 //        else {
 //            if (spn_box_cable_photo.getSelectedItemId() == 0) {
