@@ -211,8 +211,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     String card_code;
     String box_code;
 
-    ProgressDialog pd;
-    boolean setFingerPrint = false;
+    boolean setFingerPrint = true;
 
     boolean isRightFingerPrint = true;
 
@@ -240,10 +239,6 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
         CommonMethods.keyboardSetup(ll_wrapper, this);
         mPref = new MySharedPreference(this);
-        pd = new ProgressDialog(this);
-        pd.setMessage("Uploading applicant details");
-        pd.setCancelable(false);
-        pd.setCanceledOnTouchOutside(false);
 
         if(setFingerPrint) {
             registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
@@ -353,11 +348,20 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     }
 
 
+    ProgressDialog pd;
+
+
+
     public class APIHandler extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            pd = new ProgressDialog(SubscriberApplication.this);
+            pd.setMessage("Uploading applicant details");
+            pd.setCancelable(false);
+            pd.setCanceledOnTouchOutside(false);
+
             pd.show();
             pb_loading.setVisibility(View.INVISIBLE);
             System.out.println("Rabin is testing; Request sent");
@@ -594,6 +598,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
+        pd.dismiss();
 
         if(setFingerPrint) {
             mBioMiniHandle.UFA_AbortCapturing();
