@@ -51,6 +51,7 @@ public class AppContract {
         public static final int SIGNATURE = 102;
         public static final int BOX_CODE = 103;
         public static final int CARD_CODE = 104;
+        public static final int CARD_CODE2 = 105;
     }
 
     public class PARAMS {

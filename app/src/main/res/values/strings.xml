@@ -181,8 +181,10 @@
     <string name="barcode_success">Barcode read successfully</string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
-    <string name="scan_barcode_card">Card Code</string>
-    <string name="scan_barcode_box">Box Code</string>
+    <string name="scan_barcode_card">Child Box 1#</string>
+    <string name="scan_barcode_card2">Child Box 2#</string>
+    <string name="scan_barcode_box">Primary Box #</string>
+    <string name="modem_mac">Modem MAC</string>
     <string name="setting">Settings</string>
     <string name="skip_validation">Skip Validation</string>
     <string name="alt_contact_mobile_no">Optional Contact/Mobile no</string>

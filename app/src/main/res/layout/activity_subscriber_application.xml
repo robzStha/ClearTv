@@ -677,7 +677,7 @@
                             android:id="@+id/btn_qrCode_box"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"
+                            android:layout_weight="5"
                             android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
                             android:text="@string/scan_barcode_box"
                             android:textSize="@dimen/txt_12" />
@@ -689,7 +689,7 @@
                             android:focusableInTouchMode="true"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
-                            android:layout_weight="7" />
+                            android:layout_weight="6" />
 
                     </LinearLayout>
 
@@ -697,7 +697,6 @@
                         android:id="@+id/ll_qrCode_card"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spc_8"
                         android:orientation="horizontal"
                         android:weightSum="11">
 
@@ -705,7 +704,7 @@
                             android:id="@+id/btn_qrCode_card"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"
+                            android:layout_weight="5"
                             android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
                             android:text="@string/scan_barcode_card"
                             android:textSize="@dimen/txt_12" />
@@ -717,7 +716,57 @@
                             android:maxLines="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="7" />
+                            android:layout_weight="6" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_qrCode_card2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spc_8"
+                        android:orientation="horizontal"
+                        android:weightSum="11">
+
+                        <Button
+                            android:id="@+id/btn_qrCode_card2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:drawableLeft="@drawable/ic_barcode_scan_white_24dp"
+                            android:text="@string/scan_barcode_card2"
+                            android:textSize="@dimen/txt_12" />
+
+                        <EditText
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/et_card_code2"
+                            android:maxLines="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_modem_mac"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spc_8"
+                        android:orientation="horizontal">
+
+                        <com.rengwuxian.materialedittext.MaterialEditText
+                            android:id="@+id/et_modem_mac"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spc_16"
+                            android:hint="@string/modem_mac"
+                            android:textSize="16sp"
+                            android:visibility="visible"
+                            app:met_floatingLabel="highlight"
+                            app:met_primaryColor="?colorAccent"
+                            app:met_singleLineEllipsis="true" />
 
                     </LinearLayout>
 

@@ -197,19 +197,23 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @BindView(R.id.btn_qrCode_card)
     Button btn_qrCode_card;
 
+    @BindView(R.id.btn_qrCode_card2)
+    Button btn_qrCode_card2;
+
     @BindView(R.id.et_box_code)
     EditText et_box_code;
 
     @BindView(R.id.et_card_code)
     EditText et_card_code;
 
+    @BindView(R.id.et_card_code2)
+    EditText et_card_code2;
+
+    @BindView(R.id.et_modem_mac)
+    EditText et_modem_mac;
+
     String card_code;
     String box_code;
-
-    ProgressDialog pd;
-
-    boolean isRightFingerPrint = true;
-
 
     private String imagePath;
 
@@ -223,6 +227,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     private boolean mUseUsbManager;
     private boolean skipValidation = false;
 
+    boolean setFingerPrint = true;
     boolean isRightFingerprint = true;
 //    private ProgressDialog pdFP;
 
@@ -234,16 +239,22 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
         CommonMethods.keyboardSetup(ll_wrapper, this);
         mPref = new MySharedPreference(this);
-        pd = new ProgressDialog(this);
+
+        pd = new ProgressDialog(SubscriberApplication.this);
         pd.setMessage("Uploading applicant details");
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
 
-        registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
-        registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_DETACHED));
+        if (setFingerPrint) {
 
-        findBioMini();
+            registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
+            registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_DETACHED));
 
+            findBioMini();
+        } else {
+            rl_finger_print_left.setVisibility(View.GONE);
+            rl_finger_print_right.setVisibility(View.GONE);
+        }
         if (!mPref.getStringValues(AppContract.Preferences.ACCESS_TOKEN).isEmpty())
             btn_login_submit.setText(R.string.submit);
 
@@ -276,6 +287,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         rl_finger_print_left.setOnClickListener(this);
         btn_qrCode_box.setOnClickListener(this);
         btn_qrCode_card.setOnClickListener(this);
+        btn_qrCode_card2.setOnClickListener(this);
         rl_identity.setOnClickListener(this);
         rl_tnc.setOnClickListener(this);
 
@@ -336,6 +348,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         });
     }
 
+    ProgressDialog pd;
+
 
     public class APIHandler extends AsyncTask<Void, Void, Void> {
 
@@ -367,6 +381,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                     Payload.applicantSign,
                     et_box_code.getText().toString(),
                     et_card_code.getText().toString(),
+                    et_card_code2.getText().toString(),
+                    et_modem_mac.getText().toString(),
                     getNationality(),
 //                                sp_nationality.getSelectedItem().toString(),
                     mPref.getStringValues(AppContract.Preferences.USER_ID),
@@ -578,10 +594,13 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
+        pd.dismiss();
 
-        mBioMiniHandle.UFA_AbortCapturing();
-        mBioMiniHandle.UFA_Uninit();
-        isUFAInitialized = false;
+        if (setFingerPrint) {
+            mBioMiniHandle.UFA_AbortCapturing();
+            mBioMiniHandle.UFA_Uninit();
+            isUFAInitialized = false;
+        }
     }
 
     private void resetForm() {
@@ -680,11 +699,13 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         if (Payload.applicantSign.length() > 0)
             System.out.println("Rabin is testing: Signature " + Payload.applicantSign);
 //        if (Payload.boxPhoto.length() > 0)
-            System.out.println("Rabin is testing: Box Photo " +
-                            et_box_code.getText().toString());
+        System.out.println("Rabin is testing: Box Code " +
+                et_box_code.getText().toString());
 //        if (Payload.cardPhoto.length() > 0)
-            System.out.println("Rabin is testing: Card Photo " +
-                    et_card_code.getText().toString());
+        System.out.println("Rabin is testing: Card Code " +
+                et_card_code.getText().toString());
+        System.out.println("Rabin is testing: Card Code 2# " + et_card_code2.getText().toString());
+        System.out.println("Rabin is testing: Modem Mac " + et_modem_mac.getText().toString());
         System.out.println("Rabin is testing: Nationality " + sp_nationality.getSelectedItem().toString());
         System.out.println("Rabin is testing: User Id " + mPref.getStringValues(AppContract.Preferences.USER_ID));
         System.out.println("Rabin is testing: Job type " + getOccupation());
@@ -759,19 +780,22 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.TOLE_STREET);
             isValid = false;
-        } else if (et_contact_no.getText().toString().trim().length() == 0) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CONTACT);
-            isValid = false;
-        } else if (!CommonMethods.isValidEmail(et_email.getText())) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.EMAIL);
-            isValid = false;
-        } else if (current_bmp == null) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.SIGNATURE);
-            isValid = false;
         }
+//        else if (et_contact_no.getText().toString().trim().length() == 0) {
+//            pb_loading.setVisibility(View.INVISIBLE);
+//            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CONTACT);
+//            isValid = false;
+//        }
+//        else if (!CommonMethods.isValidEmail(et_email.getText())) {
+//            pb_loading.setVisibility(View.INVISIBLE);
+//            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.EMAIL);
+//            isValid = false;
+//        }
+//        else if (current_bmp == null) {
+//            pb_loading.setVisibility(View.INVISIBLE);
+//            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.SIGNATURE);
+//            isValid = false;
+//        }
 //        else if (iv_applicant.getDrawable() == null && iv_box.getDrawable() == null) {
 //            pb_loading.setVisibility(View.INVISIBLE);
 //            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX_CARD);
@@ -992,6 +1016,13 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                         .setFormats(Barcode.ALL_FORMATS)
                         .build()
                         .launchScanner(this, AppContract.RequestCode.CARD_CODE);
+                break;
+            case R.id.btn_qrCode_card2:
+                new MVBarcodeScanner.Builder()
+                        .setScanningMode(MVBarcodeScanner.ScanningMode.SINGLE_AUTO)
+                        .setFormats(Barcode.ALL_FORMATS)
+                        .build()
+                        .launchScanner(this, AppContract.RequestCode.CARD_CODE2);
                 break;
             case R.id.rl_finger_print_right:
                 isRightFingerprint = true;
@@ -1216,6 +1247,15 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
                         System.out.println("Raw Value: " + mBarcode.rawValue);
                         et_card_code.setText(mBarcode.rawValue);
 //                        et_card_code.setText(mBarcode.displayValue);
+                    } else if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObjects)) {
+                        List<Barcode> mBarcodes = data.getParcelableArrayListExtra(MVBarcodeScanner.BarcodeObjects);
+                    }
+                    break;
+                case AppContract.RequestCode.CARD_CODE2:
+                    if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObject)) {
+                        Barcode mBarcode = data.getParcelableExtra(MVBarcodeScanner.BarcodeObject);
+                        System.out.println("Raw Value: " + mBarcode.rawValue);
+                        et_card_code2.setText(mBarcode.rawValue);
                     } else if (data.getExtras().containsKey(MVBarcodeScanner.BarcodeObjects)) {
                         List<Barcode> mBarcodes = data.getParcelableArrayListExtra(MVBarcodeScanner.BarcodeObjects);
                     }

@@ -32,6 +32,8 @@ public interface ApiCalls {
             @Field("ApplicantSign") String applicantSign,
             @Field("BoxNoPhoto") String boxNoPhoto,
             @Field("CardNoPhoto") String cardNoPhoto,
+            @Field("ChildBox2") String childBox2,
+            @Field("ModemMAC") String modemMac,
             @Field("Nationality") String nationality,
             @Field("UserId") String userId,
             @Field("Occupation") String occupation,
