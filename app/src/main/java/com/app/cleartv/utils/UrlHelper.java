@@ -5,5 +5,6 @@ package com.app.cleartv.utils;
  */
 
 public class UrlHelper {
-    public static String BASE_URL = "http://110.34.24.200:1091";
+//    public static String BASE_URL = "http://110.34.24.200:1091";
+    public static String BASE_URL = "http://182.93.88.232:1091";
 }

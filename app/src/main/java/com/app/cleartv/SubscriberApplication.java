@@ -158,6 +158,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @BindView(R.id.pb_loading)
     ProgressBar pb_loading;
 
+    @BindView(R.id.tv_right)
+    TextView tv_right;
+    @BindView(R.id.tv_left)
+    TextView tv_left;
+
     ImageView iv_selected;
 
     @BindView(R.id.iv_applicant)
@@ -208,12 +213,15 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 
     @BindView(R.id.et_card_code2)
     EditText et_card_code2;
+    String card_code;
+    String box_code;
+
+    boolean setFingerPrint = true;
+    boolean isSignRequired = true;
+    boolean isBarCodeRequired = true;
 
     @BindView(R.id.et_modem_mac)
     EditText et_modem_mac;
-
-    String card_code;
-    String box_code;
 
     private String imagePath;
 
@@ -227,8 +235,9 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     private boolean mUseUsbManager;
     private boolean skipValidation = false;
 
-    boolean setFingerPrint = true;
     boolean isRightFingerprint = true;
+    static int appMode = AppContract.AppMode.NO_BARCODE_NO_SIGNATURE;
+
 //    private ProgressDialog pdFP;
 
     @Override
@@ -237,6 +246,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         setContentView(R.layout.activity_subscriber_application);
         ButterKnife.bind(this);
 
+        setAppMode();
         CommonMethods.keyboardSetup(ll_wrapper, this);
         mPref = new MySharedPreference(this);
 
@@ -250,7 +260,18 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
             registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_DETACHED));
 
-            findBioMini();
+            if (setFingerPrint) {
+                registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_ATTACHED));
+                registerReceiver(mUsbReceiver, new IntentFilter(AppContract.PARAMS.USB_DEVICE_DETACHED));
+
+                findBioMini();
+            } else {
+                rl_finger_print_left.setVisibility(View.GONE);
+                rl_finger_print_right.setVisibility(View.GONE);
+
+                tv_left.setVisibility(View.GONE);
+                tv_right.setVisibility(View.GONE);
+            }
         } else {
             rl_finger_print_left.setVisibility(View.GONE);
             rl_finger_print_right.setVisibility(View.GONE);
@@ -282,12 +303,26 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //        et_nationality.setOnTouchListener(this);
         iv_nationality_del.setOnClickListener(this);
         iv_salutation_del.setOnClickListener(this);
-        rl_sign.setOnClickListener(this);
-        rl_finger_print_right.setOnClickListener(this);
-        rl_finger_print_left.setOnClickListener(this);
-        btn_qrCode_box.setOnClickListener(this);
-        btn_qrCode_card.setOnClickListener(this);
-        btn_qrCode_card2.setOnClickListener(this);
+
+        if (isSignRequired)
+            rl_sign.setOnClickListener(this);
+        else rl_sign.setVisibility(View.GONE);
+
+        if (setFingerPrint) {
+            rl_finger_print_right.setOnClickListener(this);
+            rl_finger_print_left.setOnClickListener(this);
+        }
+
+        if (isBarCodeRequired) {
+            btn_qrCode_box.setOnClickListener(this);
+            btn_qrCode_card.setOnClickListener(this);
+            btn_qrCode_card2.setOnClickListener(this);
+        } else {
+            btn_qrCode_box.setClickable(false);
+            btn_qrCode_card.setClickable(false);
+            btn_qrCode_card2.setClickable(false);
+        }
+
         rl_identity.setOnClickListener(this);
         rl_tnc.setOnClickListener(this);
 
@@ -348,6 +383,45 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         });
     }
 
+    private void setAppMode() {
+        switch (appMode) {
+            case AppContract.AppMode.NO_SIGNATURE:
+                isSignRequired = false;
+                break;
+            case AppContract.AppMode.NO_BARCODE:
+                isBarCodeRequired = false;
+                break;
+            case AppContract.AppMode.NO_BARCODE_NO_SIGNATURE:
+                isBarCodeRequired = false;
+                isSignRequired = false;
+                break;
+            default:
+                isSignRequired = true;
+                isBarCodeRequired = true;
+                break;
+        }
+    }
+
+    private void disableBarcode() {
+        rl_sign.setVisibility(View.VISIBLE);
+        btn_qrCode_box.setClickable(false);
+        btn_qrCode_card.setClickable(false);
+        btn_qrCode_card2.setClickable(false);
+    }
+
+    private void disableSignature(){
+        rl_sign.setVisibility(View.GONE);
+        btn_qrCode_box.setClickable(true);
+        btn_qrCode_card.setClickable(true);
+        btn_qrCode_card2.setClickable(true);
+    }
+
+    private void enableAll(){
+        btn_qrCode_box.setClickable(true);
+        btn_qrCode_card.setClickable(true);
+        btn_qrCode_card2.setClickable(true);
+        rl_sign.setVisibility(View.VISIBLE);
+    }
     ProgressDialog pd;
 
 
@@ -356,6 +430,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            pd = new ProgressDialog(SubscriberApplication.this);
+            pd.setMessage("Uploading applicant details");
+            pd.setCancelable(false);
+            pd.setCanceledOnTouchOutside(false);
+
             pd.show();
             pb_loading.setVisibility(View.INVISIBLE);
             System.out.println("Rabin is testing; Request sent");
@@ -673,6 +752,23 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
             case R.id.action_init_fake:
                 PopulateData();
                 return true;
+            case R.id.action_no_barcode:
+                appMode = AppContract.AppMode.NO_BARCODE;
+                disableBarcode();
+                return true;
+            case R.id.action_no_sign:
+                appMode = AppContract.AppMode.NO_SIGNATURE;
+                disableSignature();
+                return true;
+            case R.id.action_no_bar_no_sign:
+                appMode = AppContract.AppMode.NO_BARCODE_NO_SIGNATURE;
+                disableBarcode();
+                disableSignature();
+                return true;
+            case R.id.action_all:
+                appMode = AppContract.AppMode.ALL;
+                enableAll();
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -702,10 +798,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         System.out.println("Rabin is testing: Box Code " +
                 et_box_code.getText().toString());
 //        if (Payload.cardPhoto.length() > 0)
-        System.out.println("Rabin is testing: Card Code " +
-                et_card_code.getText().toString());
         System.out.println("Rabin is testing: Card Code 2# " + et_card_code2.getText().toString());
         System.out.println("Rabin is testing: Modem Mac " + et_modem_mac.getText().toString());
+        System.out.println("Rabin is testing: Box Photo " + et_box_code.getText().toString());
+//        if (Payload.cardPhoto.length() > 0)
+        System.out.println("Rabin is testing: Card Photo " + et_card_code.getText().toString());
         System.out.println("Rabin is testing: Nationality " + sp_nationality.getSelectedItem().toString());
         System.out.println("Rabin is testing: User Id " + mPref.getStringValues(AppContract.Preferences.USER_ID));
         System.out.println("Rabin is testing: Job type " + getOccupation());
@@ -748,7 +845,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mUsbReceiver != null) {
+        if (mUsbReceiver != null && setFingerPrint) {
             unregisterReceiver(mUsbReceiver);
         }
     }
@@ -810,10 +907,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.CARD);
 //            isValid = false;
 //        }
-        else if (et_card_code.getText().toString().trim().isEmpty() && et_box_code.getText().toString().trim().isEmpty()) {
+        else if (isBarCodeRequired && et_card_code.getText().toString().trim().isEmpty() && et_box_code.getText().toString().trim().isEmpty()) {
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.BOX_CARD);
             isValid = false;
+
         } else if (iv_applicant.getDrawable() == null) {
             pb_loading.setVisibility(View.INVISIBLE);
             CustomAlertDialog.showAlertDialog(this, AppContract.Errors.APPLICANT_PHOTO);
@@ -825,9 +923,11 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
 //            isValid = false;
 //        }
         else if (iv_finger_print_right.getDrawable() == null || iv_finger_print_left.getDrawable() == null) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            CustomAlertDialog.showAlertDialog(this, AppContract.Errors.FINGERPRINT);
-            isValid = false;
+            if (setFingerPrint) {
+                pb_loading.setVisibility(View.INVISIBLE);
+                CustomAlertDialog.showAlertDialog(this, AppContract.Errors.FINGERPRINT);
+                isValid = false;
+            }
         }
 //        else {
 //            if (spn_box_cable_photo.getSelectedItemId() == 0) {
@@ -1280,7 +1380,8 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         et_tole_street_name.setText(Randoms.name(getApplicationContext()));
         et_vdc_municipality.setText(Randoms.name(getApplicationContext()));
         int ranDrawable = getRandomDrawable();
-        iv_sign.setImageDrawable(getDrawable(ranDrawable));
+        if (isSignRequired)
+            iv_sign.setImageDrawable(getDrawable(ranDrawable));
         iv_applicant.setImageDrawable(getDrawable(ranDrawable));
         iv_finger_print_right.setImageDrawable(getDrawable(ranDrawable));
         iv_finger_print_left.setImageDrawable(getDrawable(ranDrawable));
@@ -1289,7 +1390,7 @@ public class SubscriberApplication extends AppCompatActivity implements AdapterV
         BitmapDrawable drawable = (BitmapDrawable) getDrawable(ranDrawable);
         Bitmap bitmap = drawable.getBitmap();
         current_bmp = bitmap;
-        Payload.fakeInit(FileUtils.convertBitmapToBase64(bitmap));
+        Payload.fakeInit(FileUtils.convertBitmapToBase64(bitmap), isSignRequired);
         et_box_code.setText(Randoms.alphaNumericString(10));
         et_card_code.setText(Randoms.alphaNumericString(10));
     }

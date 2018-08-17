@@ -56,7 +56,7 @@
                         android:layout_toLeftOf="@id/iv_salutation_del"
                         android:inputType="textCapWords"
                         android:textSize="16sp"
-                        app:met_primaryColor="?colorAccent" />
+                        app:met_primaryColor="@color/colorAccent" />
 
                     <ImageView
                         android:id="@+id/iv_salutation_del"
@@ -80,7 +80,7 @@
                 android:nextFocusDown="@+id/sp_gender"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
+                app:met_primaryColor="@color/colorAccent"
                 app:met_singleLineEllipsis="true" />
 
             <LinearLayout
@@ -152,7 +152,7 @@
                         android:layout_toLeftOf="@id/iv_nationality_del"
                         android:inputType="textCapWords"
                         android:textSize="16sp"
-                        app:met_primaryColor="?colorAccent" />
+                        app:met_primaryColor="@color/colorAccent" />
 
                     <ImageView
                         android:id="@+id/iv_nationality_del"
@@ -226,7 +226,7 @@
                     android:hint="@string/citizen_no"
                     android:textSize="16sp"
                     app:met_floatingLabel="highlight"
-                    app:met_primaryColor="?colorAccent"
+                    app:met_primaryColor="@color/colorAccent"
                     app:met_singleLineEllipsis="true" />
 
                 <!--<TextView-->
@@ -245,7 +245,7 @@
                 <!--android:inputType="textCapWords"-->
                 <!--android:textSize="16sp"-->
                 <!--app:met_floatingLabel="highlight"-->
-                <!--app:met_primaryColor="?colorAccent"-->
+                <!--app:met_primaryColor="@color/colorAccent"-->
                 <!--app:met_singleLineEllipsis="true" />-->
 
             </LinearLayout>
@@ -315,7 +315,7 @@
                     android:nextFocusDown="@+id/et_ward_no"
                     android:textSize="16sp"
                     app:met_floatingLabel="highlight"
-                    app:met_primaryColor="?colorAccent"
+                    app:met_primaryColor="@color/colorAccent"
                     app:met_singleLineEllipsis="true" />
 
                 <com.rengwuxian.materialedittext.MaterialEditText
@@ -330,7 +330,7 @@
                     android:inputType="number"
                     android:textSize="16sp"
                     app:met_floatingLabel="highlight"
-                    app:met_primaryColor="?colorAccent"
+                    app:met_primaryColor="@color/colorAccent"
                     app:met_singleLineEllipsis="true" />
 
             </LinearLayout>
@@ -343,7 +343,7 @@
                 android:inputType="textCapWords"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
+                app:met_primaryColor="@color/colorAccent"
                 app:met_singleLineEllipsis="true" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -354,7 +354,7 @@
                 android:inputType="textCapWords"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
+                app:met_primaryColor="@color/colorAccent"
                 app:met_singleLineEllipsis="true" />
 
             <!--<com.rengwuxian.materialedittext.MaterialEditText-->
@@ -365,7 +365,7 @@
             <!--android:inputType="textCapWords"-->
             <!--android:textSize="16sp"-->
             <!--app:met_floatingLabel="highlight"-->
-            <!--app:met_primaryColor="?colorAccent"-->
+            <!--app:met_primaryColor="@color/colorAccent"-->
             <!--app:met_singleLineEllipsis="true" />-->
 
 
@@ -419,7 +419,7 @@
                 android:inputType="number"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
+                app:met_primaryColor="@color/colorAccent"
                 app:met_singleLineEllipsis="true" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -430,7 +430,7 @@
                 android:inputType="number"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
+                app:met_primaryColor="@color/colorAccent"
                 app:met_singleLineEllipsis="true" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -441,7 +441,7 @@
                 android:inputType="number"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
+                app:met_primaryColor="@color/colorAccent"
                 app:met_singleLineEllipsis="true" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -452,7 +452,7 @@
                 android:inputType="textEmailAddress"
                 android:textSize="16sp"
                 app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
+                app:met_primaryColor="@color/colorAccent"
                 app:met_singleLineEllipsis="true" />
 
             <TextView
@@ -587,7 +587,7 @@
                         android:hint="@string/clear_tv"
                         android:textSize="16sp"
                         app:met_floatingLabel="highlight"
-                        app:met_primaryColor="?colorAccent"
+                        app:met_primaryColor="@color/colorAccent"
                         app:met_singleLineEllipsis="true" />
 
                     <com.rengwuxian.materialedittext.MaterialEditText
@@ -597,7 +597,7 @@
                         android:hint="@string/cable_internet"
                         android:textSize="16sp"
                         app:met_floatingLabel="highlight"
-                        app:met_primaryColor="?colorAccent"
+                        app:met_primaryColor="@color/colorAccent"
                         app:met_singleLineEllipsis="true" />
 
                     <com.rengwuxian.materialedittext.MaterialEditText
@@ -607,7 +607,7 @@
                         android:hint="@string/ftth"
                         android:textSize="16sp"
                         app:met_floatingLabel="highlight"
-                        app:met_primaryColor="?colorAccent"
+                        app:met_primaryColor="@color/colorAccent"
                         app:met_singleLineEllipsis="true" />
 
                 </LinearLayout>
@@ -622,7 +622,7 @@
                 android:textSize="16sp"
                 android:visibility="gone"
                 app:met_floatingLabel="highlight"
-                app:met_primaryColor="?colorAccent"
+                app:met_primaryColor="@color/colorAccent"
                 app:met_singleLineEllipsis="true" />
 
             <RelativeLayout
@@ -688,7 +688,9 @@
                             android:focusable="true"
                             android:focusableInTouchMode="true"
                             android:layout_height="wrap_content"
+                            android:inputType="text"
                             android:maxLines="1"
+                            android:lines="1"
                             android:layout_weight="6" />
 
                     </LinearLayout>
@@ -713,7 +715,9 @@
                             android:focusable="true"
                             android:focusableInTouchMode="true"
                             android:id="@+id/et_card_code"
+                            android:inputType="text"
                             android:maxLines="1"
+                            android:lines="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="6" />
@@ -742,7 +746,9 @@
                             android:focusable="true"
                             android:focusableInTouchMode="true"
                             android:id="@+id/et_card_code2"
+                            android:inputType="text"
                             android:maxLines="1"
+                            android:lines="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="6" />
@@ -765,7 +771,7 @@
                             android:textSize="16sp"
                             android:visibility="visible"
                             app:met_floatingLabel="highlight"
-                            app:met_primaryColor="?colorAccent"
+                            app:met_primaryColor="@color/colorAccent"
                             app:met_singleLineEllipsis="true" />
 
                     </LinearLayout>
@@ -788,7 +794,7 @@
                             android:textSize="@dimen/txt_12" />
 
                         <TextView
-                            android:id="@+id/tv_box"
+                            android:id="@+id/tv_right"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -798,7 +804,7 @@
                             android:textSize="@dimen/txt_12" />
 
                         <TextView
-                            android:id="@+id/tv_cable"
+                            android:id="@+id/tv_left"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

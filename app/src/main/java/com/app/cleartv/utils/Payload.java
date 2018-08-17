@@ -33,12 +33,13 @@ public class Payload {
         identityPhoto = tempValue;
     }
 
-    public static void fakeInit(String image) {
+    public static void fakeInit(String image, boolean isSignRequired) {
         applicantPhoto = image;
         boxPhoto = Randoms.alphaNumericString(10);
         cardPhoto = Randoms.alphaNumericString(10);
         boxCardPhoto = image;
-        applicantSign = image;
+        if (isSignRequired)
+            applicantSign = image;
         fingerPrintRight = image;
         fingerPrintLeft = image;
         tncPhoto = image;

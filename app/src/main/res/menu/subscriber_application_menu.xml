@@ -17,7 +17,31 @@
         android:id="@+id/action_init_fake"
         android:icon="@drawable/ic_barcode_scan_white_24dp"
         android:title="@string/init_fake"
-        android:visible="true"
+        android:visible="false"
+        app:showAsAction="collapseActionView"/>
+    <item
+        android:id="@+id/action_no_barcode"
+        android:icon="@drawable/ic_gesture_black_24dp"
+        android:title="@string/no_barcode"
+        android:visible="false"
+        app:showAsAction="collapseActionView"/>
+    <item
+        android:id="@+id/action_no_sign"
+        android:icon="@drawable/ic_barcode_scan_white_24dp"
+        android:title="@string/no_sign"
+        android:visible="false"
+        app:showAsAction="collapseActionView"/>
+    <item
+        android:id="@+id/action_no_bar_no_sign"
+        android:icon="@drawable/ic_barcode_scan_white_24dp"
+        android:title="@string/no_bar_no_sign"
+        android:visible="false"
+        app:showAsAction="collapseActionView"/>
+    <item
+        android:id="@+id/action_all"
+        android:icon="@drawable/ic_barcode_scan_white_24dp"
+        android:title="@string/all"
+        android:visible="false"
         app:showAsAction="collapseActionView"/>
 
 </menu>

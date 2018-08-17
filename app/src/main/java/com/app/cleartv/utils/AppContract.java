@@ -23,7 +23,7 @@ public class AppContract {
 
     public class Errors {
         public static final String IMAGE_ERROR = "Image not found";
-        public static final String BOX_CARD = "Either box or card code of applicant is needed.";
+        public static final String BOX_CARD = "Either primary box# or child box1# of applicant is needed.";
         public static final String BOX = "Please take a photo for box number";
         public static final String CARD = "Please take a photo for card number";
         public static final String APPLICANT_PHOTO = "Please take a photo for applicant";
@@ -59,6 +59,13 @@ public class AppContract {
         public static final String USB_DEVICE_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
     }
 
+
+    public class AppMode {
+        public static final int ALL = 0;
+        public static final int NO_BARCODE = 1;
+        public static final int NO_SIGNATURE = 2;
+        public static final int NO_BARCODE_NO_SIGNATURE = 3;
+    }
 //    public class FileType {
 //        public static final int COVER_LETTER = 1;
 //        public static final int RESUME = 2;

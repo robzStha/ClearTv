@@ -192,5 +192,9 @@
     <string name="tncPhoto"><![CDATA[T&C Photo]]></string>
     <string name="mobile_no">Mobile No</string>
     <string name="init_fake">Populate data</string>
+    <string name="no_barcode">No Barcode</string>
+    <string name="no_sign">No Sign</string>
+    <string name="no_bar_no_sign">No Bar No Sign</string>
+    <string name="all">All</string>
 
 </resources>

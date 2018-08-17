@@ -28,7 +28,7 @@
             android:hint="@string/username"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            app:met_primaryColor="?colorAccent"
+            app:met_primaryColor="@color/colorAccent"
             app:met_singleLineEllipsis="true" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
@@ -39,7 +39,7 @@
             android:inputType="textPassword"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            app:met_primaryColor="?colorAccent"
+            app:met_primaryColor="@color/colorAccent"
             app:met_singleLineEllipsis="true" />
 
         <LinearLayout
